@@ -5,7 +5,7 @@ import { Table } from "flowbite-react";
 
 const UserRole: Record<string, string> = {
   Citizen: "Ciudadano",
-  Driver: "Conductor",
+  Police: "Policía",
   Admin: "Administrador",
 };
 

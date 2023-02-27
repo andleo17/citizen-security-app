@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReportController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -16,18 +17,26 @@ use Inertia\Inertia;
 |
 */
 
-Route::get('/', function () {
-  return Inertia::render('Main');
-})->name('index');
+
 
 Route::get('/dashboard', function () {
   return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
+  Route::get('/', fn () => Inertia::render('Main'))->name('index');
+  Route::post('/reports', [ReportController::class, 'store'])->name('reports.store');
   Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
   Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
   Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+Route::middleware(['auth', 'access:Driver'])->group(function () {
+  Route::get('driver', [DriverController::class, 'index'])->name('driver.location');
+  Route::get('driver/truck', [DriverController::class, 'edit'])->name('driver.truck.edit');
+  Route::put('driver/truck/{truck}', [DriverController::class, 'update'])->name('driver.truck.update');
+  Route::delete('driver/truck/{truck}', [DriverController::class, 'destroy'])->name('driver.truck.destroy');
+  Route::put('driver/truck/{truck}/location', [DriverController::class, 'updatePosition'])->name('driver.truck.location');
 });
 
 require __DIR__ . '/auth.php';

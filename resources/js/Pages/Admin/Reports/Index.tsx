@@ -42,7 +42,7 @@ function Index({ auth, reports }: any) {
                 <Table.Cell>{formatDescription(r.description)}</Table.Cell>
                 <Table.Cell>{r.user.fullname}</Table.Cell>
                 <Table.Cell>{r.is_important ? "Sí" : "No"}</Table.Cell>
-                <Table.Cell>{r.state}</Table.Cell>
+                <Table.Cell>{r.state ? "Atendido" : "Pendiente"}</Table.Cell>
                 <Table.Cell>{r.created_at}</Table.Cell>
                 <Table.Cell>
                   <Link

@@ -14,7 +14,7 @@ return new class extends Migration
     Schema::create('report_sub_categories', function (Blueprint $table) {
       $table->id();
       $table->string('name');
-      $table->text('description');
+      $table->text('description')->nullable();
       $table->timestamps();
       $table->foreignId('report_category_id')->constrained();
     });

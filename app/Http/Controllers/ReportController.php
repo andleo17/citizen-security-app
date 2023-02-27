@@ -6,6 +6,7 @@ use App\Casts\TimeAgo;
 use App\Http\Requests\StoreReportRequest;
 use App\Http\Requests\UpdateReportRequest;
 use App\Models\Report;
+use App\Models\ReportCategory;
 use App\Utils\Geometry;
 use Inertia\Inertia;
 use MatanYadaev\EloquentSpatial\Objects\Point;
@@ -49,7 +50,7 @@ class ReportController extends Controller
 
     $report->location = Geometry::toPoint($request->location);
     $report->description = $request->description;
-    $report->is_important = $request->isImportant;
+    $report->emergency = $request->emergency;
     $report->user_id = $request->user()->id;
 
     if ($request->hasFile('photos')) {
@@ -58,7 +59,7 @@ class ReportController extends Controller
         $path = $photo->store('images/reports');
         array_push($photos_paths, str_replace('images', 'storage', $path));
       }
-      $report->image_paths =  $photos_paths;
+      $report->images =  $photos_paths;
     }
 
     $report->save();
@@ -85,7 +86,10 @@ class ReportController extends Controller
    */
   public function edit(Report $report)
   {
-    return Inertia::render('Admin/Reports/Edit', ['report' => $report->load('user')]);
+    return Inertia::render('Admin/Reports/Edit', [
+      'report' => $report->load('user', 'reportSubCategory'),
+      'categories' => ReportCategory::all()->load('subCategories')
+    ]);
   }
 
   /**
@@ -97,6 +101,7 @@ class ReportController extends Controller
    */
   public function update(UpdateReportRequest $request, Report $report)
   {
+    $report->report_sub_category_id = $request->subCategory;
     $report->state = $request->state;
     $report->save();
 

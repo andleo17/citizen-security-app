@@ -1,5 +1,7 @@
+import SelectInput from "@/Components/Common/Forms/SelectInput";
+import TextInput from "@/Components/Common/Forms/TextInput";
 import { useForm } from "@inertiajs/react";
-import { Button, Label, Select, TextInput, ToggleSwitch } from "flowbite-react";
+import { Button, ToggleSwitch } from "flowbite-react";
 import { FormEventHandler, useEffect } from "react";
 
 interface UserFormProps {
@@ -13,6 +15,7 @@ function UserForm({ user }: UserFormProps) {
       name: user?.name || "",
       lastname: user?.lastname || "",
       email: user?.email || "",
+      phone: user?.phone || "",
       role: user?.role || "Citizen",
       password: "",
       password_confirmation: "",
@@ -42,109 +45,86 @@ function UserForm({ user }: UserFormProps) {
 
   return (
     <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
-      <div>
-        <div className="mb-2 block">
-          <Label htmlFor="dni" value="Documento de identidad" />
-        </div>
-        <TextInput
-          id="dni"
-          type="number"
-          placeholder="12345678"
-          value={data.dni}
-          onChange={(e) => setData("dni", e.target.value)}
-          helperText={errors.dni}
-          required
-        />
-      </div>
-      <div>
-        <div className="mb-2 block">
-          <Label htmlFor="name" value="Nombres" />
-        </div>
-        <TextInput
-          id="name"
-          type="text"
-          placeholder="Juan"
-          value={data.name}
-          onChange={(e) => setData("name", e.target.value)}
-          helperText={errors.name}
-          required
-        />
-      </div>
-      <div>
-        <div className="mb-2 block">
-          <Label htmlFor="lastname" value="Apellidos" />
-        </div>
-        <TextInput
-          id="lastname"
-          type="text"
-          placeholder="Pérez"
-          value={data.lastname}
-          onChange={(e) => setData("lastname", e.target.value)}
-          helperText={errors.lastname}
-          required
-        />
-      </div>
-      <div>
-        <div className="mb-2 block">
-          <Label htmlFor="email" value="Correo electrónico" />
-        </div>
-        <TextInput
-          id="email"
-          type="email"
-          placeholder="correo@ejemplo.com"
-          value={data.email}
-          onChange={(e) => setData("email", e.target.value)}
-          helperText={errors.email}
-          required
-        />
-      </div>
-      <div>
-        <div className="mb-2 block">
-          <Label htmlFor="role" value="Rol" />
-        </div>
-        <Select
-          id="role"
-          value={data.role}
-          onChange={(e) => setData("role", e.target.value)}
-          helperText={errors.role}
-        >
-          <option value="Citizen">Ciudadano</option>
-          <option value="Driver">Conductor</option>
-          <option value="Admin">Administrador</option>
-        </Select>
-      </div>
-      <div>
-        <div className="mb-2 block">
-          <Label htmlFor="password" value="Contraseña" />
-        </div>
-        <TextInput
-          id="password"
-          type="password"
-          placeholder="Ingrese la nueva contraseña"
-          value={data.password}
-          onChange={(e) => setData("password", e.target.value)}
-          helperText={errors.password}
-          required={!user}
-        />
-      </div>
+      <TextInput
+        id="dni"
+        labelText="Documento de identidad"
+        type="number"
+        placeholder="Ingrese el DNI"
+        value={data.dni}
+        errors={errors.dni}
+        required
+        onChange={(e) => setData("dni", e.target.value)}
+      />
+      <TextInput
+        id="name"
+        labelText="Nombres"
+        placeholder="Ingrese los nombres"
+        value={data.name}
+        errors={errors.name}
+        required
+        onChange={(e) => setData("name", e.target.value)}
+      />
+      <TextInput
+        id="lastname"
+        labelText="Apellidos"
+        placeholder="Ingrese los apellidos"
+        value={data.lastname}
+        errors={errors.lastname}
+        required
+        onChange={(e) => setData("lastname", e.target.value)}
+      />
+      <TextInput
+        id="email"
+        labelText="Correo electrónico"
+        placeholder="Ingrese el correo electrónico"
+        type="email"
+        value={data.email}
+        errors={errors.email}
+        required
+        onChange={(e) => setData("email", e.target.value)}
+      />
+      <TextInput
+        id="phone"
+        labelText="Teléfono"
+        placeholder="Ingrese el teléfono"
+        type="tel"
+        value={data.phone}
+        errors={errors.phone}
+        required
+        onChange={(e) => setData("phone", e.target.value)}
+      />
+      <SelectInput
+        id="role"
+        value={data.role}
+        labelText="Rol"
+        errors={errors.role}
+        onChange={(e) => setData("role", e.target.value)}
+      >
+        <SelectInput.Item value="Citizen">Ciudadano</SelectInput.Item>
+        <SelectInput.Item value="Police">Policía</SelectInput.Item>
+        <SelectInput.Item value="Admin">Administrador</SelectInput.Item>
+      </SelectInput>
+      <TextInput
+        id="password"
+        labelText="Contraseña"
+        placeholder="Ingrese la contraseña"
+        type="password"
+        value={data.password}
+        errors={errors.password}
+        required
+        onChange={(e) => setData("password", e.target.value)}
+      />
       {(data.password.length > 0 || !user) && (
-        <div>
-          <div className="mb-2 block">
-            <Label
-              htmlFor="password_confirmation"
-              value="Verificación de contraseña"
-            />
-          </div>
-          <TextInput
-            id="password_confirmation"
-            type="password"
-            placeholder="Ingrese nuevamente la contraseña"
-            value={data.password_confirmation}
-            onChange={(e) => setData("password_confirmation", e.target.value)}
-            helperText={errors.password_confirmation}
-            required
-          />
-        </div>
+        <TextInput
+          id="password_confirmation"
+          labelText="Verificación de contraseña"
+          placeholder="Ingrese nuevamente la contraseña"
+          type="password"
+          value={data.password}
+          errors={errors.password}
+          required
+          onChange={(e) => setData("password", e.target.value)}
+        />
       )}
       <ToggleSwitch
         checked={data.state}

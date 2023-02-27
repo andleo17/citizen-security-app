@@ -11,5 +11,9 @@ export default defineConfig({
     }),
     react(),
   ],
+  resolve: {
+    alias: {
+      "@icons": "/resources/assets/icons",
+    },
+  },
 });
-

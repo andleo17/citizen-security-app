@@ -10,7 +10,7 @@ export default function Main(props: any) {
   const { data, setData, post, processing, errors, reset } = useForm({
     description: "",
     photos: null,
-    isImportant: false,
+    emergency: false,
     location: null,
   });
 

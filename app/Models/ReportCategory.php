@@ -4,12 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class ReportCategory extends Model
 {
   use HasFactory;
 
-  protected function subCategories()
+  protected $fillable = ['name', 'description'];
+
+  public function subCategories(): HasMany
   {
     return $this->hasMany(ReportSubCategory::class);
   }

@@ -6,9 +6,10 @@ function Edit(props: any) {
   return (
     <AdminLayout auth={props.auth}>
       <Head title="Editar reporte" />
-      <ReportForm report={props.report} />
+      <ReportForm report={props.report} categories={props.categories} />
     </AdminLayout>
   );
 }
 
 export default Edit;
+

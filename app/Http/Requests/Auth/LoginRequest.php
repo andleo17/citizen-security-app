@@ -43,7 +43,7 @@ class LoginRequest extends FormRequest
     $this->ensureIsNotRateLimited();
 
     if (!Auth::attemptWhen($this->only('dni', 'password'), function (User $user) {
-      if ($user->isBanned())
+      if ($user->trashed())
         throw ValidationException::withMessages(['dni' => 'User is banned']);
 
       return true;

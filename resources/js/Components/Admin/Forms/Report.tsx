@@ -7,16 +7,20 @@ import Map, { MapWrapper } from "@/Components/Maps/Map";
 import Marker from "@/Components/Maps/Marker";
 import { pointToJson } from "@/Utils/Geometry";
 import { useForm } from "@inertiajs/react";
-import { Button } from "flowbite-react";
+import { Button, ToggleSwitch } from "flowbite-react";
 import { FormEventHandler, useState } from "react";
 
 interface ReportFormProps {
   report: any;
+  categories: any[];
 }
 
-function ReportForm({ report }: ReportFormProps) {
+function ReportForm({ report, categories }: ReportFormProps) {
+  console.log({ report, categories });
   const { data, setData, processing, put } = useForm({
-    state: report.state || "Pending",
+    state: report.state,
+    category: report.report_sub_category?.report_category_id || -1,
+    subCategory: report.report_sub_category_id || -1,
   });
   const [modalOpen, setModalOpen] = useState(false);
   const [srcImg, setSrcImg] = useState("");
@@ -35,30 +39,61 @@ function ReportForm({ report }: ReportFormProps) {
           value={report.user.fullname}
           readOnly
         />
+        <SelectInput
+          id="category"
+          labelText="Categoría"
+          placeholder="Seleccione una categoría"
+          value={data.category}
+          onChange={(e) => setData("category", Number(e.target.value))}
+          required
+        >
+          {categories.map((c: any) => (
+            <SelectInput.Item key={c.id} value={c.id}>
+              {c.name}
+            </SelectInput.Item>
+          ))}
+        </SelectInput>
+        <SelectInput
+          id="subCategory"
+          labelText="Sub categoría"
+          placeholder="Seleccione una subcategoría"
+          value={data.subCategory}
+          onChange={(e) => setData("subCategory", Number(e.target.value))}
+          required
+        >
+          {categories
+            .find((c: any) => c.id === data.category)
+            ?.sub_categories?.map((c: any) => (
+              <SelectInput.Item key={c.id} value={c.id}>
+                {c.name}
+              </SelectInput.Item>
+            ))}
+        </SelectInput>
         <TextAreaInput
           id="description"
           labelText="Descripción"
           value={report.description}
           readOnly
         />
-        <SelectInput
-          id="state"
-          labelText="Estado"
-          value={data.state}
-          onChange={(e) => setData("state", e.target.value)}
-          required
-        >
-          <SelectInput.Item value="Pending">Pendiente</SelectInput.Item>
-          <SelectInput.Item value="Accepted">Atendido</SelectInput.Item>
-          <SelectInput.Item value="Rejected">Rechazado</SelectInput.Item>
-        </SelectInput>
-        {report.image_paths && (
+        <ToggleSwitch
+          checked={report.emergency}
+          label="Marcado como emergencia"
+          onChange={() => {}}
+          aria-readonly
+          disabled
+        />
+        <ToggleSwitch
+          checked={data.state}
+          label="Marcado como revisado"
+          onChange={(e) => setData("state", e)}
+        />
+        {report.images && (
           <div>
             <div className="mb-2 block">
               <Label htmlFor="images" value="Fotos de prueba" />
             </div>
             <div className="flex gap-2 flex-col sm:flex-row">
-              {report.image_paths.map((i: string) => (
+              {report.images.map((i: string) => (
                 <img
                   src={"/" + i}
                   alt={i}

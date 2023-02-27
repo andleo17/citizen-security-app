@@ -4,17 +4,28 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use MatanYadaev\EloquentSpatial\Objects\Point;
+use MatanYadaev\EloquentSpatial\Traits\HasSpatial;
 
 class Report extends Model
 {
   use HasFactory;
+  use HasSpatial;
 
-  protected function user()
+  protected $casts = [
+    'emergency' => 'boolean',
+    'state' => 'boolean',
+    'images' => 'array',
+    'location' => Point::class,
+  ];
+
+  public function user(): BelongsTo
   {
     return $this->belongsTo(User::class);
   }
 
-  protected function subCategory()
+  public function reportSubCategory(): BelongsTo
   {
     return $this->belongsTo(ReportSubCategory::class);
   }

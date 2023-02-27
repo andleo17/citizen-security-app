@@ -29,6 +29,9 @@
     "vite": "^4.0.0"
   },
   "dependencies": {
-    "@googlemaps/react-wrapper": "^1.1.35"
+    "@googlemaps/react-wrapper": "^1.1.35",
+    "laravel-echo": "^1.15.0",
+    "pusher-js": "^8.0.1",
+    "ziggy-js": "^1.5.0"
   }
 }

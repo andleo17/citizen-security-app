@@ -15,7 +15,7 @@ return new class extends Migration
       $table->id();
       $table->text('description');
       $table->point('location');
-      $table->json('images');
+      $table->json('images')->nullable();
       $table->boolean('emergency')->default(false);
       $table->boolean('state')->default(false);
       $table->timestamps();

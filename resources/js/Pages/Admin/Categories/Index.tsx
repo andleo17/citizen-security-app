@@ -3,17 +3,17 @@ import AdminLayout from "@/Layouts/AdminLayout";
 import { Head, Link } from "@inertiajs/react";
 import { Table } from "flowbite-react";
 
-function Index({ auth, zones }: any) {
+function Index({ auth, categories }: any) {
   return (
     <AdminLayout auth={auth}>
       <Head title="Lista de categorías" />
       <h1 className="font-bold text-2xl mb-5">Listado de categorías</h1>
       <div className="my-5">
-        <NavLink href={route("admin.zones.create")} color="green">
+        <NavLink href={route("admin.categories.create")} color="green">
           Agregar
         </NavLink>
       </div>
-      {zones.length > 0 ? (
+      {categories.length > 0 ? (
         <Table hoverable>
           <Table.Head>
             <Table.HeadCell>ID</Table.HeadCell>
@@ -26,7 +26,7 @@ function Index({ auth, zones }: any) {
             </Table.HeadCell>
           </Table.Head>
           <Table.Body className="divide-y">
-            {zones.map((z: any) => (
+            {categories.map((z: any) => (
               <Table.Row
                 key={z.id}
                 className="bg-white dark:border-gray-700 dark:bg-gray-800"
@@ -37,7 +37,7 @@ function Index({ auth, zones }: any) {
                 <Table.Cell>{z.name}</Table.Cell>
                 <Table.Cell>
                   <Link
-                    href={route("admin.zones.edit", z.id)}
+                    href={route("admin.categories.edit", z.id)}
                     className="font-medium text-blue-600 hover:underline dark:text-blue-500"
                   >
                     Editar
@@ -45,7 +45,7 @@ function Index({ auth, zones }: any) {
                 </Table.Cell>
                 <Table.Cell>
                   <Link
-                    href={route("admin.zones.destroy", z.id)}
+                    href={route("admin.categories.destroy", z.id)}
                     className="font-medium text-red-600 hover:underline dark:text-red-500"
                     method={"delete"}
                     as="button"
@@ -67,4 +67,3 @@ function Index({ auth, zones }: any) {
 }
 
 export default Index;
-
