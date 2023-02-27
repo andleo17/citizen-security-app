@@ -90,7 +90,6 @@ function UserForm({ user }: UserFormProps) {
         type="tel"
         value={data.phone}
         errors={errors.phone}
-        required
         onChange={(e) => setData("phone", e.target.value)}
       />
       <SelectInput
@@ -111,7 +110,6 @@ function UserForm({ user }: UserFormProps) {
         type="password"
         value={data.password}
         errors={errors.password}
-        required
         onChange={(e) => setData("password", e.target.value)}
       />
       {(data.password.length > 0 || !user) && (
@@ -122,7 +120,6 @@ function UserForm({ user }: UserFormProps) {
           type="password"
           value={data.password}
           errors={errors.password}
-          required
           onChange={(e) => setData("password", e.target.value)}
         />
       )}
