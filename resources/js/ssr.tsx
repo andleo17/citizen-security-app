@@ -5,12 +5,12 @@ import { resolvePageComponent } from "laravel-vite-plugin/inertia-helpers";
 import route from "ziggy-js";
 import { Page } from "@inertiajs/core";
 
-const appName = "Laravel";
+const appName = process.env.APP_NAME || "Laravel";
 
-createServer((page: Page<any>) =>
-  createInertiaApp({
-    page,
+createServer((page: Page<any>) => {
+  return createInertiaApp({
     render: ReactDOMServer.renderToString,
+    page,
     title: (title) => `${title} - ${appName}`,
     resolve: (name) =>
       resolvePageComponent(
@@ -26,5 +26,6 @@ createServer((page: Page<any>) =>
 
       return <App {...props} />;
     },
-  })
-);
+  });
+});
+

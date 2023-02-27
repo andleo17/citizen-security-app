@@ -8,12 +8,6 @@ function formatDescription(description: string) {
   return description.slice(0, 40) + "...";
 }
 
-const ReportState: Record<string, string> = {
-  Pending: "Pendiente",
-  Accepted: "Atendido",
-  Rejected: "Rechazado",
-};
-
 function Index({ auth, reports }: any) {
   return (
     <AdminLayout auth={auth}>
@@ -48,7 +42,7 @@ function Index({ auth, reports }: any) {
                 <Table.Cell>{formatDescription(r.description)}</Table.Cell>
                 <Table.Cell>{r.user.fullname}</Table.Cell>
                 <Table.Cell>{r.is_important ? "Sí" : "No"}</Table.Cell>
-                <Table.Cell>{ReportState[r.state]}</Table.Cell>
+                <Table.Cell>{r.state}</Table.Cell>
                 <Table.Cell>{r.created_at}</Table.Cell>
                 <Table.Cell>
                   <Link

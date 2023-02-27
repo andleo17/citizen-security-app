@@ -1,6 +1,5 @@
 import Sidebar from "@/Components/Admin/Sidebar";
 import Navbar from "@/Components/App/Navbar";
-import DriverIcon from "@/Icons/DriverIcon";
 import ToggleSidebarIcon from "@/Icons/ToggleSidebarIcon";
 import { PropsWithChildren } from "react";
 import ToggleThemeButton from "@/Components/App/ToggleThemeButton";
@@ -22,8 +21,10 @@ function AdminLayout({ children, auth }: PropsWithChildren<any>) {
           <Menu user={auth.user} />
         </Navbar>
         <Sidebar.Content>
-          <Sidebar.Item href={route("admin.zones.index")} label="Zonas" />
-          <Sidebar.Item href={route("admin.trucks.index")} label="Camiones" />
+          <Sidebar.Item
+            href={route("admin.categories.index")}
+            label="Categorías"
+          />
           <Sidebar.Item href={route("admin.reports.index")} label="Reportes" />
           <Sidebar.Item href={route("admin.users.index")} label="Usuarios" />
         </Sidebar.Content>

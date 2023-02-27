@@ -1,18 +1,15 @@
-import TruckForm from "@/Components/Admin/Forms/Truck";
+import ZoneForm from "@/Components/Admin/Forms/Zone";
 import AdminLayout from "@/Layouts/AdminLayout";
 import { Head } from "@inertiajs/react";
 
 function Edit(props: any) {
   return (
     <AdminLayout auth={props.auth}>
-      <Head title="Editar camión" />
-      <TruckForm
-        truck={props.truck}
-        drivers={props.drivers}
-        zones={props.zones}
-      />
+      <Head title="Editar categoría" />
+      <ZoneForm zone={props.zone} />
     </AdminLayout>
   );
 }
 
 export default Edit;
+
