@@ -25,7 +25,7 @@ const Marker: React.FC<MarkerOptions> = (options) => {
   }, []);
 
   useEffect(() => {
-    marker?.setOptions(options);
+    // marker?.setOptions(options);
     let listener: google.maps.MapsEventListener;
 
     if (options.displayHTML) {

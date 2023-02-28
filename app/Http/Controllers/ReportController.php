@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Casts\TimeAgo;
+use App\Events\NewReport;
 use App\Http\Requests\StoreReportRequest;
 use App\Http\Requests\UpdateReportRequest;
 use App\Models\Report;
@@ -64,6 +65,8 @@ class ReportController extends Controller
 
     $report->save();
 
+    broadcast(new NewReport($report));
+
     return;
   }
 
@@ -104,6 +107,8 @@ class ReportController extends Controller
     $report->report_sub_category_id = $request->subCategory;
     $report->state = $request->state;
     $report->save();
+
+    event(new NewReport($report));
 
     return redirect()->route('admin.reports.index');
   }

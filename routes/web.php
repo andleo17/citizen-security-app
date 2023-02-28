@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReportController;
+use App\Models\Report;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -31,7 +32,9 @@ Route::middleware('auth')->group(function () {
   Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::middleware(['auth', 'access:Driver'])->group(function () {
+Route::middleware(['auth', 'access:Police'])->group(function () {
+  Route::get('watch', fn () => Inertia::render('Watch', ['reports' => Report::where('state', 'false')->get()]))->name('watch');
+
   Route::get('driver', [DriverController::class, 'index'])->name('driver.location');
   Route::get('driver/truck', [DriverController::class, 'edit'])->name('driver.truck.edit');
   Route::put('driver/truck/{truck}', [DriverController::class, 'update'])->name('driver.truck.update');

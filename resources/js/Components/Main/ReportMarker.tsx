@@ -1,4 +1,6 @@
+import { pointToJson } from "@/Utils/Geometry";
 import Marker from "../Maps/Marker";
+import { useEffect, useState } from "react";
 
 interface ReportMarkerOptions {
   report: any;
@@ -6,11 +8,28 @@ interface ReportMarkerOptions {
 }
 
 export default function ReportMarker({ report, map }: ReportMarkerOptions) {
+  const [isBlink, setBlink] = useState(false);
+
+  useEffect(() => {
+    const animationInterval = setInterval(() => {
+      setBlink((prev) => !prev);
+    }, 500);
+
+    return () => {
+      clearInterval(animationInterval);
+    };
+  }, []);
+
   return (
     <Marker
+      position={pointToJson(report.location)}
       icon={{
-        url: "https://cdn-icons-png.flaticon.com/512/1166/1166009.png",
-        scaledSize: new google.maps.Size(32, 32),
+        path: google.maps.SymbolPath.CIRCLE,
+        scale: 6,
+        fillColor: isBlink ? "#661515" : "#9c1f33",
+        fillOpacity: 1,
+        strokeColor: "#000000",
+        strokeWeight: 1.2,
       }}
       map={map}
     />
