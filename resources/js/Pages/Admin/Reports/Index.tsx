@@ -31,8 +31,8 @@ function Index({ auth, reports }: any) {
               <Table.Row
                 key={r.id}
                 className={`dark:border-gray-700 dark:bg-gray-800 ${
-                  r.is_important &&
-                  r.state === "Pending" &&
+                  r.emergency &&
+                  !r.state &&
                   "animate-pulse-emergency dark:animate-pulse-emergency-dark dark:text-white text-black"
                 }`}
               >
@@ -41,7 +41,7 @@ function Index({ auth, reports }: any) {
                 </Table.Cell>
                 <Table.Cell>{formatDescription(r.description)}</Table.Cell>
                 <Table.Cell>{r.user.fullname}</Table.Cell>
-                <Table.Cell>{r.is_important ? "Sí" : "No"}</Table.Cell>
+                <Table.Cell>{r.emergency ? "Sí" : "No"}</Table.Cell>
                 <Table.Cell>{r.state ? "Atendido" : "Pendiente"}</Table.Cell>
                 <Table.Cell>{r.created_at}</Table.Cell>
                 <Table.Cell>

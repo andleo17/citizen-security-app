@@ -13,3 +13,23 @@
     margin: 0;
   }
 }
+
+.pullee {
+	border-radius: 1em;
+}
+
+.pullee:active::-webkit-slider-thumb {
+  transform: scale(2);
+}
+
+.pullee::-webkit-slider-thumb {
+  background: #9C1111;
+  transform: scale(3);
+  transition: transform ease-out 100ms;
+}
+
+.pullee::-webkit-slider-runnable-track {
+  padding: 0.5em;
+  border-radius: 1em;
+  background-color: #DDE0E3;
+}

@@ -16,8 +16,7 @@ interface ReportFormProps {
 }
 
 function ReportForm({ report, categories }: ReportFormProps) {
-  console.log({ report, categories });
-  const { data, setData, processing, put } = useForm({
+  const { data, setData, processing, put, transform } = useForm({
     state: report.state,
     category: report.report_sub_category?.report_category_id || -1,
     subCategory: report.report_sub_category_id || -1,
@@ -27,6 +26,10 @@ function ReportForm({ report, categories }: ReportFormProps) {
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
+    transform((d) => ({
+      ...d,
+      subCategory: d.subCategory !== -1 ? d.subCategory : null,
+    }));
     put(route("admin.reports.update", { id: report.id }));
   };
 

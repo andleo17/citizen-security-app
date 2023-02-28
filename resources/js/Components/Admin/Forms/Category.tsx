@@ -16,10 +16,6 @@ function CategoryForm({ category }: CategoryFormProps) {
     subCategories: category?.sub_categories || [],
   });
 
-  useEffect(() => {
-    console.log(data);
-  }, [data]);
-
   const handleSubmit: FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
     if (category) {
@@ -63,9 +59,11 @@ function CategoryForm({ category }: CategoryFormProps) {
         rows={5}
         errors={errors.description}
       />
-      <Button onClick={handleAddSubCategory} color="success">
-        Agregar subcategoría
-      </Button>
+      {category && (
+        <Button onClick={handleAddSubCategory} color="success">
+          Agregar subcategoría
+        </Button>
+      )}
       {data.subCategories.length > 0 && (
         <Table hoverable>
           <Table.Head>

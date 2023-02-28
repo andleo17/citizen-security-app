@@ -32,9 +32,10 @@ class ReportCategoryController extends Controller
    */
   public function store(StoreReportCategoryRequest $request)
   {
-    ReportCategory::create($request->all());
+    $category = new ReportCategory($request->all());
+    $category->save();
 
-    return redirect()->route('admin.categories.index');
+    return redirect()->route('admin.categories.edit', $category);
   }
 
   /**

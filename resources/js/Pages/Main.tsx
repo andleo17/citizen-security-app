@@ -1,18 +1,21 @@
 import FileInput from "@/Components/Common/Forms/FileInput";
 import TextAreaInput from "@/Components/Common/Forms/TextAreaInput";
 import PrimaryButton from "@/Components/Common/PrimaryButton";
+import Slider from "@/Components/Common/Slider";
 import useLocation from "@/Hooks/UseLocation";
 import AppLayout from "@/Layouts/AppLayout";
 import { Head, useForm } from "@inertiajs/react";
 import { FormEventHandler, useEffect } from "react";
 
 export default function Main(props: any) {
-  const { data, setData, post, processing, errors, reset } = useForm({
-    description: "",
-    photos: null,
-    emergency: false,
-    location: null,
-  });
+  const { data, setData, post, processing, errors, reset, transform } = useForm(
+    {
+      description: "",
+      photos: null,
+      emergency: false,
+      location: null,
+    }
+  );
 
   const { location, locationError } = useLocation();
 
@@ -67,6 +70,26 @@ export default function Main(props: any) {
             >
               Enviar reporte
             </PrimaryButton>
+          </div>
+          <div>
+            <Slider
+              maxValue={200}
+              onSlideEnd={() => {
+                transform((d) => ({
+                  ...d,
+                  description: "Esto es una llamada de emergencia.",
+                  emergency: true,
+                }));
+                post(route("reports.store"), {
+                  onSuccess() {
+                    reset();
+                  },
+                });
+              }}
+            />
+            <p className="text-red-900 dark:text-red-600">
+              Desliza hacia el final para enviar un reporte de emergencia.
+            </p>
           </div>
         </div>
       </form>
