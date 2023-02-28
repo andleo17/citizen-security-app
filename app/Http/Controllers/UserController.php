@@ -90,7 +90,6 @@ class UserController extends Controller
     $user->lastname = $request->lastname;
     $user->email = $request->email;
     $user->role = $request->role;
-    $user->state = $request->state;
 
     if ($request->password) $user->password = Hash::make($request->password);
 
