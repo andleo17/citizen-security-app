@@ -1,13 +1,19 @@
 import { pointToJson } from "@/Utils/Geometry";
 import Marker from "../Maps/Marker";
 import { useEffect, useState } from "react";
+import { Report } from "vendor";
 
 interface ReportMarkerOptions {
-  report: any;
+  report: Report;
   map?: google.maps.Map;
+  onClick: Function;
 }
 
-export default function ReportMarker({ report, map }: ReportMarkerOptions) {
+export default function ReportMarker({
+  report,
+  map,
+  onClick,
+}: ReportMarkerOptions) {
   const [isBlink, setBlink] = useState(false);
 
   useEffect(() => {
@@ -32,6 +38,7 @@ export default function ReportMarker({ report, map }: ReportMarkerOptions) {
         strokeWeight: 1.2,
       }}
       map={map}
+      onClick={onClick}
     />
   );
 }

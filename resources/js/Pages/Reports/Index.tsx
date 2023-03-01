@@ -1,5 +1,6 @@
 import ReportItem from "@/Components/Reports/ReportItem";
 import AppLayout from "@/Layouts/AppLayout";
+import { Head } from "@inertiajs/react";
 import { Report, User } from "vendor";
 
 interface ReportList {
@@ -10,6 +11,7 @@ interface ReportList {
 function ReportList(props: ReportList) {
   return (
     <AppLayout auth={props.auth}>
+      <Head title="Mis reportes" />
       <h1 className="font-bold text-2xl mb-4">Mis reportes</h1>
       <section className="space-y-5">
         {props.reports.map((r) => (
@@ -21,3 +23,4 @@ function ReportList(props: ReportList) {
 }
 
 export default ReportList;
+

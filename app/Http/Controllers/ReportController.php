@@ -65,7 +65,7 @@ class ReportController extends Controller
 
     $report->save();
 
-    broadcast(new NewReport($report));
+    event(new NewReport($report->load('user')));
 
     return redirect()->route('reports.index');
   }
@@ -122,5 +122,15 @@ class ReportController extends Controller
   public function destroy(Report $report)
   {
     //
+  }
+
+  public function attend(Report $report)
+  {
+    $report->state = true;
+    $report->save();
+
+    event(new NewReport($report));
+
+    return;
   }
 }

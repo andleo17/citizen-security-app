@@ -2,37 +2,46 @@ import { useEffect, useState } from "react";
 
 export interface MarkerOptions extends google.maps.MarkerOptions {
   displayHTML?: string;
+  onClick?: Function;
 }
 
-const Marker: React.FC<MarkerOptions> = (options) => {
+const Marker: React.FC<MarkerOptions> = ({
+  displayHTML,
+  onClick,
+  ...options
+}) => {
   const [marker, setMarker] = useState<google.maps.Marker>();
   const [infoWindow, setInfoWindow] = useState<google.maps.InfoWindow>();
 
   useEffect(() => {
-    if (options.displayHTML)
+    if (displayHTML)
       setInfoWindow(
         new google.maps.InfoWindow({
-          content: options.displayHTML,
+          content: displayHTML,
         })
       );
 
-    setMarker(new google.maps.Marker(options));
+    const newMarker = new google.maps.Marker(options);
+    setMarker(newMarker);
 
     return () => {
-      marker?.setMap(null);
-      if (options.displayHTML) infoWindow?.close();
+      newMarker?.setMap(null);
+      if (displayHTML) infoWindow?.close();
     };
   }, []);
 
   useEffect(() => {
-    // marker?.setOptions(options);
+    marker?.setOptions(options);
     let listener: google.maps.MapsEventListener;
 
-    if (options.displayHTML) {
-      infoWindow?.setOptions({ content: options.displayHTML });
-      listener = marker?.addListener("click", () =>
-        infoWindow?.open(options.map, marker)
-      );
+    if (displayHTML) {
+      infoWindow?.setOptions({ content: displayHTML });
+    }
+    if (displayHTML || onClick) {
+      listener = marker?.addListener("click", () => {
+        if (displayHTML) infoWindow?.open(options.map, marker);
+        if (onClick) onClick();
+      });
     }
 
     return () => {

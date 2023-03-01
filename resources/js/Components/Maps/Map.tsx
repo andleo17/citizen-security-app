@@ -31,10 +31,6 @@ export default function Map({
     }
   }, [mapRef, map]);
 
-  useEffect(() => {
-    if (map) map.setOptions(options);
-  }, [options]);
-
   return (
     <>
       <div

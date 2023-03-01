@@ -22,6 +22,7 @@ type User = {
   dni: string;
   name: string;
   lastname: string;
+  fullname: string;
   email: string;
   phone?: string;
   email_verified_at?: string;
@@ -63,6 +64,7 @@ type Report = {
   created_at: string;
   updated_at: string;
   user_id: number;
+  user: User;
   report_sub_category_id?: number;
   report_sub_category?: ReportSubCategory;
 };

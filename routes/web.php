@@ -30,13 +30,14 @@ Route::middleware('auth')->group(function () {
     'reports' => auth()->user()->reports->load('reportSubCategory')->sortBy([['state', 'asc'], ['created_at', 'desc'],])->values()
   ]))->name('reports.index');
   Route::post('/reports', [ReportController::class, 'store'])->name('reports.store');
+  Route::post('/reports/attend/{report}', [ReportController::class, 'attend'])->name('reports.attend');
   Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
   Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
   Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
 Route::middleware(['auth', 'access:Police'])->group(function () {
-  Route::get('watch', fn () => Inertia::render('Watch', ['reports' => Report::where('state', 'false')->get()]))->name('watch');
+  Route::get('watch', fn () => Inertia::render('Watch', ['reports' => Report::where('state', 'false')->with('user')->get()]))->name('watch');
 
   Route::get('driver', [DriverController::class, 'index'])->name('driver.location');
   Route::get('driver/truck', [DriverController::class, 'edit'])->name('driver.truck.edit');
