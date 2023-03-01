@@ -4,6 +4,7 @@ import DriverIcon from "@/Icons/DriverIcon";
 import AdminIcon from "@/Icons/AdminIcon";
 import UserIcon from "@/Icons/UserIcon";
 import MapIcon from "@/Icons/MapIcon";
+import ReportIcon from "@/Icons/ReportIcon";
 
 function Menu({ user }: any) {
   if (!user) return <NavLink href={route("login")}>Iniciar sesión</NavLink>;
@@ -34,6 +35,9 @@ function Menu({ user }: any) {
       <Dropdown.Content>
         <Dropdown.Link href={route("profile.edit")} icon={UserIcon}>
           Perfil
+        </Dropdown.Link>
+        <Dropdown.Link href={route("reports.index")} icon={ReportIcon}>
+          Mis reportes
         </Dropdown.Link>
         {user.role !== "Citizen" && (
           <Dropdown.Link href={route("watch")} icon={MapIcon}>

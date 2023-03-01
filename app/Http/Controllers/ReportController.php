@@ -67,7 +67,7 @@ class ReportController extends Controller
 
     broadcast(new NewReport($report));
 
-    return;
+    return redirect()->route('reports.index');
   }
 
   /**

@@ -4,8 +4,13 @@ import ToggleSidebarIcon from "@/Icons/ToggleSidebarIcon";
 import { PropsWithChildren } from "react";
 import ToggleThemeButton from "@/Components/App/ToggleThemeButton";
 import Menu from "@/Components/App/Menu";
+import { User } from "vendor";
 
-function AdminLayout({ children, auth }: PropsWithChildren<any>) {
+interface AdminLayoutProps {
+  auth: { user?: User };
+}
+
+function AdminLayout({ children, auth }: PropsWithChildren<AdminLayoutProps>) {
   return (
     <div className="bg-zinc-100 text-gray-900 dark:bg-[#020617] dark:text-white h-full flex transition-colors">
       <Sidebar>

@@ -16,14 +16,23 @@
 
 .pullee {
 	border-radius: 1em;
-}
-
-.pullee:active::-webkit-slider-thumb {
-  transform: scale(2);
+  width: 100%;
 }
 
 .pullee::-webkit-slider-thumb {
-  background: #9C1111;
+  background-repeat: no-repeat !important;
+  background-image: url('/sos-icon.svg') !important;
+  background-position: center !important;
+  background-color: #9C1111 !important;
+  transform: scale(3);
+  transition: transform ease-out 100ms;
+}
+
+.familiar::-webkit-slider-thumb {
+  background-repeat: no-repeat !important;
+  background-image: url('/house-icon.svg') !important;
+  background-position: center !important;
+  background-color: #9C1111 !important;
   transform: scale(3);
   transition: transform ease-out 100ms;
 }

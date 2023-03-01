@@ -3,6 +3,12 @@ import Map, { MapWrapper } from "@/Components/Maps/Map";
 import AppLayout from "@/Layouts/AppLayout";
 import { Head } from "@inertiajs/react";
 import { useEffect, useState } from "react";
+import { Report, User } from "vendor";
+
+interface WatchProps {
+  auth: { user: User };
+  reports: Report[];
+}
 
 function getDefaultLocation() {
   const location: string = import.meta.env.VITE_DEFAULT_LOCATION;
@@ -10,10 +16,10 @@ function getDefaultLocation() {
   return { lat: Number(coordinates[0]), lng: Number(coordinates[1]) };
 }
 
-function Watch(props: any) {
+function Watch(props: WatchProps) {
   const [reports, setReports] = useState(props.reports);
 
-  function updateReport(report: any) {
+  function updateReport(report: Report) {
     const newReports = [...reports];
     const reportIndex = newReports.findIndex((r: any) => r.id === report.id);
 
@@ -32,7 +38,7 @@ function Watch(props: any) {
   useEffect(() => {
     Echo.channel("reports").listen(
       ".watch.reports",
-      function ({ report }: any) {
+      function ({ report }: { report: Report }) {
         updateReport(report);
       }
     );
@@ -45,7 +51,7 @@ function Watch(props: any) {
       <Head title="Vigilancia" />
       <MapWrapper>
         <Map zoom={15} center={getDefaultLocation()} mapTypeControl={false}>
-          {reports.map((r: any) => (
+          {reports.map((r) => (
             <ReportMarker key={r.id} report={r} />
           ))}
         </Map>

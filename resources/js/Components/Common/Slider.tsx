@@ -1,11 +1,13 @@
-import { useEffect, useRef, useState } from "react";
+import DriverIcon from "@/Icons/DriverIcon";
+import { useEffect, useState } from "react";
 
 interface SliderProps {
   maxValue: number;
   onSlideEnd: Function;
+  className?: string;
 }
 
-function Slider({ maxValue, onSlideEnd }: SliderProps) {
+function Slider({ maxValue, onSlideEnd, className }: SliderProps) {
   const [value, setValue] = useState(0);
   const [isSliding, setSliding] = useState(false);
 
@@ -29,18 +31,11 @@ function Slider({ maxValue, onSlideEnd }: SliderProps) {
   return (
     <input
       type="range"
-      className="w-full pullee"
+      className={"appearance-none pullee " + className}
       value={value}
       min={0}
       max={maxValue}
-      onChange={(e) => {
-        const currentValue = Number(e.target.value);
-        if (
-          (isSliding && currentValue < maxValue * 0.1) ||
-          value >= maxValue * 0.09
-        )
-          setValue(currentValue);
-      }}
+      onChange={(e) => setValue(Number(e.target.value))}
       onMouseDown={() => handleSlideEnter()}
       onMouseUp={() => handleSlideLeave()}
       onTouchStart={() => handleSlideEnter()}

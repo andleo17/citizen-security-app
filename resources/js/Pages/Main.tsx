@@ -6,26 +6,25 @@ import useLocation from "@/Hooks/UseLocation";
 import AppLayout from "@/Layouts/AppLayout";
 import { Head, useForm } from "@inertiajs/react";
 import { FormEventHandler, useEffect } from "react";
+import { User } from "vendor";
 
-export default function Main(props: any) {
-  const { data, setData, post, processing, errors, reset, transform } = useForm(
-    {
-      description: "",
-      photos: null,
-      emergency: false,
-      location: null,
-    }
-  );
+interface MainProps {
+  auth: { user: User };
+}
+
+export default function Main({ auth }: MainProps) {
+  const { data, setData, post, processing, errors, transform } = useForm({
+    description: "",
+    photos: null,
+    emergency: false,
+    location: null,
+  });
 
   const { location, locationError } = useLocation();
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
-    post(route("reports.store"), {
-      onSuccess() {
-        reset();
-      },
-    });
+    post(route("reports.store"));
   };
 
   useEffect(() => {
@@ -37,10 +36,10 @@ export default function Main(props: any) {
   }, [location]);
 
   return (
-    <AppLayout auth={props.auth}>
+    <AppLayout auth={auth}>
       <Head title="Inicio" />
       <form onSubmit={handleSubmit}>
-        <div className="space-y-6 px-6 pb-4 sm:pb-6 lg:px-8 xl:pb-8">
+        <div className="space-y-6">
           <h3 className="text-xl font-medium text-gray-900 dark:text-white">
             Realiza un reporte
           </h3>
@@ -75,50 +74,41 @@ export default function Main(props: any) {
             <Slider
               maxValue={200}
               onSlideEnd={() => {
-                transform((d) => ({
-                  ...d,
-                  description: "Esto es una llamada de emergencia.",
+                transform((prev) => ({
+                  ...data,
+                  description:
+                    "¡Auxilio! Estoy en una emergencia. Necesito a las autoridades urgentemente.",
                   emergency: true,
                 }));
-                post(route("reports.store"), {
-                  onSuccess() {
-                    reset();
-                  },
-                });
+
+                post(route("reports.store"));
               }}
             />
-            <p className="text-red-900 dark:text-red-600">
+            <p className="text-red-900 dark:text-red-600 mt-3 text-center">
               Desliza hacia el final para enviar un reporte de emergencia.
+            </p>
+          </div>
+          <div>
+            <Slider
+              className="familiar"
+              maxValue={200}
+              onSlideEnd={() => {
+                transform((prev) => ({
+                  ...prev,
+                  description:
+                    "¡Auxilio! Estoy en una emergencia de violencia familiar. Necesito a las autoridades urgentemente.",
+                  emergency: true,
+                }));
+                post(route("reports.store"));
+              }}
+            />
+            <p className="text-red-900 dark:text-red-600 mt-3 text-center">
+              Desliza hacia el final para enviar un reporte de emergencia acerca
+              de violencia familiar.
             </p>
           </div>
         </div>
       </form>
-      <aside
-        className="absolute bottom-0 left-0 z-50 justify-center w-full hidden"
-        role="alert"
-        id="reportToast"
-      >
-        <div className="flex p-4 mb-4 text-sm text-green-800 border border-green-300 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400 dark:border-green-800">
-          <svg
-            aria-hidden="true"
-            className="flex-shrink-0 inline w-5 h-5 mr-3"
-            fill="currentColor"
-            viewBox="0 0 20 20"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              fillRule="evenodd"
-              d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
-              clipRule="evenodd"
-            ></path>
-          </svg>
-          <span className="sr-only">Info</span>
-          <div className="font-normal">
-            <span className="font-bold">¡Reporte enviado!</span> Pronto
-            enviaremos a las autoridades para atender tu reporte.
-          </div>
-        </div>
-      </aside>
     </AppLayout>
   );
 }

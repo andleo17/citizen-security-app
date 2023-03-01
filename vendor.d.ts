@@ -10,3 +10,59 @@ declare global {
   var Pusher: typeof Pusher;
   var Echo: Echo;
 }
+
+enum UserRole {
+  Citizen = "Citizen",
+  Police = "Police",
+  Admin = "Admin",
+}
+
+type User = {
+  id: number;
+  dni: string;
+  name: string;
+  lastname: string;
+  email: string;
+  phone?: string;
+  email_verified_at?: string;
+  has_criminal_record: boolean;
+  password: string;
+  role: UserRole;
+  created_at: string;
+  updated_at: string;
+  deleted_at?: string;
+  reports?: Report[];
+};
+
+type ReportCategory = {
+  id: number;
+  name: string;
+  description?: string;
+  created_at: string;
+  updated_at: string;
+  report_subcategories?: ReportSubCategory[];
+};
+
+type ReportSubCategory = {
+  id: number;
+  name: string;
+  description?: string;
+  created_at: string;
+  updated_at: string;
+  report_category_id: number;
+  report_category: ReportCategory;
+};
+
+type Report = {
+  id: number;
+  description: string;
+  location: any;
+  images?: string[];
+  emergency: boolean;
+  state: boolean;
+  created_at: string;
+  updated_at: string;
+  user_id: number;
+  report_sub_category_id?: number;
+  report_sub_category?: ReportSubCategory;
+};

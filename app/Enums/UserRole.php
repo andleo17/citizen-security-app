@@ -2,6 +2,7 @@
 
 namespace App\Enums;
 
+/** @typescript **/
 enum UserRole: string
 {
   case Citizen = 'Citizen';

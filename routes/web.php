@@ -26,6 +26,9 @@ Route::get('/dashboard', function () {
 
 Route::middleware('auth')->group(function () {
   Route::get('/', fn () => Inertia::render('Main'))->name('index');
+  Route::get('/reports', fn () => Inertia::render('Reports/Index', [
+    'reports' => auth()->user()->reports->load('reportSubCategory')->sortBy([['state', 'asc'], ['created_at', 'desc'],])->values()
+  ]))->name('reports.index');
   Route::post('/reports', [ReportController::class, 'store'])->name('reports.store');
   Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
   Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
