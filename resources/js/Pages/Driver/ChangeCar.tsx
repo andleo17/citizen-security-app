@@ -6,18 +6,18 @@ import { Head, useForm } from "@inertiajs/react";
 import { Button, Label, TextInput } from "flowbite-react";
 import { FormEventHandler, useEffect, useState } from "react";
 
-function ChangeTruck({ auth, trucks }: any) {
+function ChangeCar({ auth, cars }: any) {
   const [isOpen, setOpen] = useState(false);
   const [searchFilter, setSearchFilter] = useState("");
-  const [filteredTrucks, setFilteredTrucks] = useState(trucks);
+  const [filteredCars, setFilteredCars] = useState(cars);
   const { data, setData, put } = useForm({
-    truckId: -1,
+    carId: -1,
     licensePlate: "",
   });
 
   useEffect(() => {
-    setFilteredTrucks(
-      trucks.filter((t: any) =>
+    setFilteredCars(
+      cars.filter((t: any) =>
         t.licensePlate.toLowerCase().includes(searchFilter.toLowerCase())
       )
     );
@@ -25,16 +25,16 @@ function ChangeTruck({ auth, trucks }: any) {
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
-    put(route("driver.truck.update", data.truckId));
+    put(route("driver.car.update", data.carId));
   };
 
-  if (trucks.length === 0) {
+  if (cars.length === 0) {
     return (
       <AppLayout auth={auth}>
         <Head title="Cambiar camión" />
         <div className="flex flex-col items-center mt-5 gap-6">
           <p className="font-bold text-2xl text-center">
-            Actualmente no hay camiones disponibles
+            Actualmente no hay carros disponibles
           </p>
           <NavLink href={route("driver.location")}>Regresar</NavLink>
         </div>
@@ -44,20 +44,20 @@ function ChangeTruck({ auth, trucks }: any) {
 
   return (
     <AppLayout auth={auth}>
-      <Head title="Cambiar camión" />
+      <Head title="Cambiar carro" />
       <div>
-        <Label id="search-filter" className="sr-only" value="Buscar camión" />
+        <Label id="search-filter" className="sr-only" value="Buscar carro" />
         <TextInput
           icon={SearchIcon}
           type="search"
           id="search-filter"
-          placeholder="Buscar camión por placa"
+          placeholder="Buscar carro por placa"
           value={searchFilter}
           onChange={(e) => setSearchFilter(e.target.value)}
         />
       </div>
       <ul className="w-full text-gray-900 dark:text-white mt-4">
-        {filteredTrucks.map((t: any) => (
+        {filteredCars.map((t: any) => (
           <li
             key={t.id}
             className="px-4 py-2 border rounded-lg my-2 bg-white dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-800 dark:border-gray-600 border-gray-200 cursor-pointer"
@@ -65,7 +65,7 @@ function ChangeTruck({ auth, trucks }: any) {
             data-modal-show="popup-modal"
             onClick={() => {
               setOpen(true);
-              setData({ truckId: t.id, licensePlate: t.licensePlate });
+              setData({ carId: t.id, licensePlate: t.licensePlate });
             }}
           >
             <span>{t.licensePlate}</span>
@@ -78,7 +78,7 @@ function ChangeTruck({ auth, trucks }: any) {
       <Modal show={isOpen} onClose={() => setOpen(false)} maxWidth="md">
         <div className="text-center py-4 px-3">
           <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
-            ¿Estás seguro de cambiar a este camión?
+            ¿Estás seguro de cambiar a este carro?
           </h3>
           <p className="text-black dark:text-white font-bold mb-6">
             {data.licensePlate}
@@ -103,4 +103,4 @@ function ChangeTruck({ auth, trucks }: any) {
   );
 }
 
-export default ChangeTruck;
+export default ChangeCar;

@@ -2,56 +2,54 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\TruckLocationChange;
+use App\Events\CarLocationChange;
 use App\Models\Car;
-use App\Models\Truck;
 use App\Utils\Geometry;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
-use Symfony\Contracts\EventDispatcher\Event;
 
 class DriverController extends Controller
 {
   public function index()
   {
-    $truck = Auth::user()->truck;
-    return Inertia::render('Driver/EmitLocation', ['truck' => $truck]);
+    $car = Auth::user()->car;
+    return Inertia::render('Driver/EmitLocation', ['car' => $car]);
   }
 
   public function edit()
   {
-    if (Auth::user()->truck !== null) return redirect()->route('driver.location');
-    $trucks = Car::doesntHave('user')->with('zone')->get();
-    return Inertia::render('Driver/ChangeTruck', ['trucks' => $trucks]);
+    if (Auth::user()->car !== null) return redirect()->route('driver.location');
+    $cars = Car::doesntHave('user')->get();
+    return Inertia::render('Driver/ChangeCar', ['cars' => $cars]);
   }
 
-  public function update(Request $request, Car $truck)
+  public function update(Request $request, Car $car)
   {
-    $truck->user_id = $request->user()->id;
-    $truck->save();
+    $car->user_id = $request->user()->id;
+    $car->save();
 
-    // broadcast(new TruckLocationChange($truck));
+    event(new CarLocationChange($car));
 
     return redirect()->route('driver.location');
   }
 
-  public function updatePosition(Request $request, Car $truck)
+  public function updatePosition(Request $request, Car $car)
   {
-    $truck->location = Geometry::toPoint($request->location);
-    $truck->save();
+    $car->location = Geometry::toPoint($request->location);
+    $car->save();
 
-    // broadcast(new TruckLocationChange($truck));
+    event(new CarLocationChange($car));
 
     return response()->json(['message' => 'ok']);
   }
 
-  public function destroy(Car $truck)
+  public function destroy(Car $car)
   {
-    $truck->user_id = null;
-    $truck->save();
+    $car->user_id = null;
+    $car->save();
 
-    // broadcast(new TruckLocationChange($truck));
+    event(new CarLocationChange($car));
 
     return redirect()->route('driver.location');
   }

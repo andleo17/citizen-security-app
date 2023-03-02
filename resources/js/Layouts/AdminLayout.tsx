@@ -30,6 +30,7 @@ function AdminLayout({ children, auth }: PropsWithChildren<AdminLayoutProps>) {
             href={route("admin.categories.index")}
             label="Categorías"
           />
+          <Sidebar.Item href={route("admin.cars.index")} label="Carros" />
           <Sidebar.Item href={route("admin.reports.index")} label="Reportes" />
           <Sidebar.Item href={route("admin.users.index")} label="Usuarios" />
         </Sidebar.Content>

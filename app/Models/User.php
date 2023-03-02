@@ -65,6 +65,11 @@ class User extends Authenticatable
     return $this->hasMany(Report::class);
   }
 
+  protected function car()
+  {
+    return $this->hasOne(Car::class);
+  }
+
   public function hasRole(string $role): bool
   {
     return $this->role === $role;
