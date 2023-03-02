@@ -46,8 +46,7 @@ function CarLocation({ map, initialCars }: any) {
           key={t.id}
           icon={{
             url: truckIcon,
-            scale: 1,
-            scaledSize: new google.maps.Size(35, 35),
+            scaledSize: new google.maps.Size(50, 50),
           }}
           position={pointToJson(t.location)}
           displayHTML={renderToStaticMarkup(<TruckInfo car={t} />)}
