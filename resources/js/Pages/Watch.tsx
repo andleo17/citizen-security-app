@@ -3,6 +3,7 @@ import TextAreaInput from "@/Components/Common/Forms/TextAreaInput";
 import TextInput from "@/Components/Common/Forms/TextInput";
 import Modal from "@/Components/Common/Modal";
 import NavLink from "@/Components/Common/NavLink";
+import CarLocation from "@/Components/Main/CarLocation";
 import ReportMarker from "@/Components/Main/ReportMarker";
 import Map, { MapWrapper } from "@/Components/Maps/Map";
 import AppLayout from "@/Layouts/AppLayout";
@@ -13,6 +14,7 @@ import { Report, User } from "vendor";
 interface WatchProps {
   auth: { user: User };
   reports: Report[];
+  cars: any[];
 }
 
 function getDefaultLocation() {
@@ -85,6 +87,7 @@ function Watch(props: WatchProps) {
               onClick={() => setSelectedReport(r)}
             />
           ))}
+          <CarLocation initialCars={props.cars} />
         </Map>
       </MapWrapper>
       <Modal show={!!selectedReport} onClose={() => setSelectedReport(null)}>

@@ -3,6 +3,7 @@
 use App\Http\Controllers\DriverController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReportController;
+use App\Models\Car;
 use App\Models\Report;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -37,7 +38,10 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware(['auth', 'access:Police'])->group(function () {
-  Route::get('watch', fn () => Inertia::render('Watch', ['reports' => Report::where('state', 'false')->with('user')->get()]))->name('watch');
+  Route::get('watch', fn () => Inertia::render('Watch', [
+    'reports' => Report::where('state', 'false')->with('user')->get(),
+    'cars' => Car::has('user')->get()
+  ]))->name('watch');
 
   Route::get('driver', [DriverController::class, 'index'])->name('driver.location');
   Route::get('driver/car', [DriverController::class, 'edit'])->name('driver.car.edit');
