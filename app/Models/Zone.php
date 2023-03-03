@@ -5,12 +5,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use MatanYadaev\EloquentSpatial\Objects\Polygon;
+use MatanYadaev\EloquentSpatial\Traits\HasSpatial;
 
-class Car extends Model
+class Zone extends Model
 {
   use HasFactory;
-  use SoftDeletes;
+  use HasSpatial;
+
+  protected $casts = [
+    'area' => Polygon::class,
+  ];
 
   public function patrols(): HasMany
   {

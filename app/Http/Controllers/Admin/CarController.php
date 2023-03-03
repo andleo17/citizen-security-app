@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Models\Car;
 use App\Http\Requests\StoreCarRequest;
 use App\Http\Requests\UpdateCarRequest;
-use App\Models\User;
-use App\Utils\Geometry;
 use Inertia\Inertia;
 
 class CarController extends Controller
@@ -16,7 +15,9 @@ class CarController extends Controller
    */
   public function index()
   {
-    return Inertia::render('Admin/Cars/Index', ['cars' => Car::with('user')->get()]);
+    return Inertia::render('Admin/Cars/Index', [
+      'cars' => Car::all(),
+    ]);
   }
 
   /**
@@ -24,7 +25,7 @@ class CarController extends Controller
    */
   public function create()
   {
-    return Inertia::render('Admin/Cars/Create', ['drivers' => User::whereIn('role', ['Police', 'Admin'])->get()]);
+    return Inertia::render('Admin/Cars/Create');
   }
 
   /**
@@ -33,10 +34,7 @@ class CarController extends Controller
   public function store(StoreCarRequest $request)
   {
     $car = new Car();
-
     $car->licensePlate = $request->licensePlate;
-    $car->state = $request->state;
-    $car->user_id = $request->user_id;
 
     $car->save();
 
@@ -56,7 +54,9 @@ class CarController extends Controller
    */
   public function edit(Car $car)
   {
-    return Inertia::render('Admin/Cars/Edit', ['car' => $car, 'drivers' => User::whereIn('role', ['Police', 'Admin'])->get()]);
+    return Inertia::render('Admin/Cars/Edit', [
+      'car' => $car,
+    ]);
   }
 
   /**
@@ -65,8 +65,6 @@ class CarController extends Controller
   public function update(UpdateCarRequest $request, Car $car)
   {
     $car->licensePlate = $request->licensePlate;
-    $car->state = $request->state;
-    $car->user_id = $request->user_id;
 
     $car->save();
 

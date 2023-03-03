@@ -5,25 +5,9 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReportController;
 use App\Models\Car;
 use App\Models\Report;
+use App\Models\Zone;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
-
-
-
-Route::get('/dashboard', function () {
-  return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
   Route::get('/', fn () => Inertia::render('Main'))->name('index');
@@ -40,7 +24,8 @@ Route::middleware('auth')->group(function () {
 Route::middleware(['auth', 'access:Police'])->group(function () {
   Route::get('watch', fn () => Inertia::render('Watch', [
     'reports' => Report::where('state', 'false')->with('user')->get(),
-    'cars' => Car::has('user')->get()
+    'cars' => Car::has('user')->get(),
+    'zones' => Zone::all(),
   ]))->name('watch');
 
   Route::get('driver', [DriverController::class, 'index'])->name('driver.location');

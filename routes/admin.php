@@ -1,17 +1,13 @@
 <?php
 
-use App\Http\Controllers\CarController;
-use App\Http\Controllers\ReportCategoryController;
-use App\Http\Controllers\ReportController;
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\Admin;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
-Route::get('/', function () {
-  return Inertia::render('Admin/Dashboard');
-})->name('admin.dashboard');
+Route::get('', Admin\DashboardController::class)->name('admin.dashboard');
 
-Route::resource('reports', ReportController::class)->names('admin.reports');
-Route::resource('categories', ReportCategoryController::class)->names('admin.categories');
-Route::resource('users', UserController::class)->names('admin.users');
-Route::resource('cars', CarController::class)->names('admin.cars');
+Route::resource('reports', Admin\ReportController::class)->names('admin.reports');
+Route::resource('categories', Admin\ReportCategoryController::class)->names('admin.categories');
+Route::resource('users', Admin\UserController::class)->names('admin.users');
+Route::resource('cars', Admin\CarController::class)->names('admin.cars');
+Route::resource('zones', Admin\ZoneController::class)->names('admin.zones');
+Route::resource('patrols', Admin\PatrolController::class)->names('admin.patrols');

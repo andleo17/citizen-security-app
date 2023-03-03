@@ -7,6 +7,7 @@ namespace App\Models;
 use App\Enums\UserRole;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -65,9 +66,9 @@ class User extends Authenticatable
     return $this->hasMany(Report::class);
   }
 
-  protected function car()
+  protected function patrols(): HasMany
   {
-    return $this->hasOne(Car::class);
+    return $this->hasMany(Patrol::class);
   }
 
   public function hasRole(string $role): bool

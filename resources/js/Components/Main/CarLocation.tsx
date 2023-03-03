@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import Marker from "../Maps/Marker";
 import truckIcon from "@icons/truck-icon.svg";
 import { renderToStaticMarkup } from "react-dom/server";
-import { pointToJson } from "@/Utils/Geometry";
+import { lineStringtoJson, pointToJson } from "@/Utils/Geometry";
+import Polyline from "../Maps/Polyline";
 
 function TruckInfo({ car }: any) {
   return (
@@ -42,19 +43,29 @@ function CarLocation({ map, initialCars }: any) {
   return (
     <>
       {cars?.map((t: any) => (
-        <Marker
-          key={t.id}
-          icon={{
-            url: truckIcon,
-            scaledSize: new google.maps.Size(50, 50),
-          }}
-          position={pointToJson(t.location)}
-          displayHTML={renderToStaticMarkup(<TruckInfo car={t} />)}
-          map={map}
-        />
+        <Fragment key={t.id}>
+          <Marker
+            key={t.id}
+            icon={{
+              url: truckIcon,
+              scaledSize: new google.maps.Size(50, 50),
+            }}
+            position={pointToJson(t.location)}
+            displayHTML={renderToStaticMarkup(<TruckInfo car={t} />)}
+            map={map}
+          />
+          <Polyline
+            path={lineStringtoJson(t.route)}
+            map={map}
+            strokeColor={"#add8ff"}
+            strokeWeight={6}
+            strokeOpacity={1}
+          />
+        </Fragment>
       ))}
     </>
   );
 }
 
 export default CarLocation;
+

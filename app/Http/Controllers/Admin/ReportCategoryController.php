@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
-use App\Models\ReportCategory;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreReportCategoryRequest;
 use App\Http\Requests\UpdateReportCategoryRequest;
+use App\Models\ReportCategory;
 use App\Models\ReportSubCategory;
 use Inertia\Inertia;
 use Inertia\Response;

@@ -5,8 +5,10 @@ import Modal from "@/Components/Common/Modal";
 import NavLink from "@/Components/Common/NavLink";
 import CarLocation from "@/Components/Main/CarLocation";
 import ReportMarker from "@/Components/Main/ReportMarker";
+import Area from "@/Components/Maps/Area";
 import Map, { MapWrapper } from "@/Components/Maps/Map";
 import AppLayout from "@/Layouts/AppLayout";
+import { polygonToJson } from "@/Utils/Geometry";
 import { Head, Link } from "@inertiajs/react";
 import { useEffect, useState } from "react";
 import { Report, User } from "vendor";
@@ -15,6 +17,7 @@ interface WatchProps {
   auth: { user: User };
   reports: Report[];
   cars: any[];
+  zones: any[];
 }
 
 function getDefaultLocation() {
@@ -86,6 +89,9 @@ function Watch(props: WatchProps) {
               report={r}
               onClick={() => setSelectedReport(r)}
             />
+          ))}
+          {props.zones.map((z: any) => (
+            <Area key={z.id} paths={polygonToJson(z.area)} />
           ))}
           <CarLocation initialCars={props.cars} />
         </Map>

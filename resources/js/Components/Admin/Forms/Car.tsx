@@ -1,33 +1,33 @@
-import SelectInput from "@/Components/Common/Forms/SelectInput";
+import type { FormEvent } from "react";
+import type { Car } from "vendor";
+
 import TextInput from "@/Components/Common/Forms/TextInput";
 import { useForm } from "@inertiajs/react";
-import { Button, ToggleSwitch } from "flowbite-react";
-import { FormEventHandler } from "react";
+import { Button } from "flowbite-react";
 
 interface CarProps {
-  car?: any;
-  drivers: any[];
+  car?: Car;
 }
 
-function CarForm({ car, drivers }: CarProps) {
-  const { data, setData, post, processing, errors, put, transform } = useForm({
+function useCarForm(car: Car) {
+  const { data, setData, post, processing, errors, put } = useForm({
     licensePlate: car?.licensePlate || "",
-    state: car?.state || true,
-    user_id: car?.user_id || -1,
   });
 
-  const handleSubmit: FormEventHandler<HTMLFormElement> = (e) => {
+  function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    transform((d) => ({
-      ...d,
-      user_id: d.user_id !== -1 ? d.user_id : null,
-    }));
     if (car) {
       put(route("admin.cars.update", { id: car.id }));
     } else {
       post(route("admin.cars.store"));
     }
-  };
+  }
+
+  return { data, setData, processing, errors, handleSubmit };
+}
+
+function CarForm({ car }: CarProps) {
+  const { data, setData, errors, processing, handleSubmit } = useCarForm(car);
 
   return (
     <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
@@ -39,26 +39,6 @@ function CarForm({ car, drivers }: CarProps) {
         onChange={(e) => setData("licensePlate", e.target.value)}
         errors={errors.licensePlate}
         required
-      />
-      <SelectInput
-        id="user_id"
-        labelText="Chofer"
-        value={data.user_id}
-        onChange={(e) => setData("user_id", Number(e.target.value))}
-        placeholder="Selecciona un usuario"
-        errors={errors.user_id}
-        required
-      >
-        {drivers.map((z) => (
-          <SelectInput.Item value={z.id} key={z.id}>
-            {z.fullname}
-          </SelectInput.Item>
-        ))}
-      </SelectInput>
-      <ToggleSwitch
-        checked={data.state}
-        label="Activo"
-        onChange={(e) => setData("state", e)}
       />
       <Button type="submit" disabled={processing}>
         Guardar

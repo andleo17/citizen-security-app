@@ -1,16 +1,16 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use App\Casts\TimeAgo;
 use App\Events\NewReport;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreReportRequest;
 use App\Http\Requests\UpdateReportRequest;
 use App\Models\Report;
 use App\Models\ReportCategory;
 use App\Utils\Geometry;
 use Inertia\Inertia;
-use MatanYadaev\EloquentSpatial\Objects\Point;
 
 class ReportController extends Controller
 {
