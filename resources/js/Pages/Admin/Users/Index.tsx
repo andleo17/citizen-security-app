@@ -1,7 +1,14 @@
+import type { User } from "vendor";
+
 import NavLink from "@/Components/Common/NavLink";
 import AdminLayout from "@/Layouts/AdminLayout";
 import { Head, Link } from "@inertiajs/react";
 import { Table } from "flowbite-react";
+
+interface IndexProps {
+  auth: { user: User };
+  users: User[];
+}
 
 const UserRole: Record<string, string> = {
   Citizen: "Ciudadano",
@@ -9,7 +16,7 @@ const UserRole: Record<string, string> = {
   Admin: "Administrador",
 };
 
-function Index({ auth, users }: any) {
+function Index({ auth, users }: IndexProps) {
   return (
     <AdminLayout auth={auth}>
       <Head title="Lista de usuarios" />
@@ -35,7 +42,7 @@ function Index({ auth, users }: any) {
             </Table.HeadCell>
           </Table.Head>
           <Table.Body className="divide-y">
-            {users.map((u: any) => (
+            {users.map((u) => (
               <Table.Row
                 key={u.id}
                 className="bg-white dark:border-gray-700 dark:bg-gray-800"
@@ -46,7 +53,7 @@ function Index({ auth, users }: any) {
                 <Table.Cell>{u.dni}</Table.Cell>
                 <Table.Cell>{u.fullname}</Table.Cell>
                 <Table.Cell>{UserRole[u.role]}</Table.Cell>
-                <Table.Cell>{u.state ? "Activo" : "Inactivo"}</Table.Cell>
+                <Table.Cell>{u.deleted_at ? "Inactivo" : "Activo"}</Table.Cell>
                 <Table.Cell>
                   <Link
                     href={route("admin.users.edit", u.id)}

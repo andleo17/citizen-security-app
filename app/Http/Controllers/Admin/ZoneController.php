@@ -17,7 +17,7 @@ class ZoneController extends Controller
   public function index()
   {
     return Inertia::render('Admin/Zones/Index', [
-      'zones' => Zone::withCount('cars')->get(),
+      'zones' => Zone::all(),
     ]);
   }
 

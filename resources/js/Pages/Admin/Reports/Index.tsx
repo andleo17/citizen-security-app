@@ -1,6 +1,13 @@
+import type { Report, User } from "vendor";
+
 import AdminLayout from "@/Layouts/AdminLayout";
 import { Head, Link } from "@inertiajs/react";
 import { Table } from "flowbite-react";
+
+interface IndexProps {
+  auth: { user: User };
+  reports: Report[];
+}
 
 function formatDescription(description: string) {
   if (description.length < 40) return description;
@@ -8,7 +15,7 @@ function formatDescription(description: string) {
   return description.slice(0, 40) + "...";
 }
 
-function Index({ auth, reports }: any) {
+function Index({ auth, reports }: IndexProps) {
   return (
     <AdminLayout auth={auth}>
       <Head title="Lista de reportes" />
@@ -19,6 +26,7 @@ function Index({ auth, reports }: any) {
             <Table.HeadCell>ID</Table.HeadCell>
             <Table.HeadCell>Descripción</Table.HeadCell>
             <Table.HeadCell>Ciudadano</Table.HeadCell>
+            <Table.HeadCell>Categoría</Table.HeadCell>
             <Table.HeadCell>Importante</Table.HeadCell>
             <Table.HeadCell>Estado</Table.HeadCell>
             <Table.HeadCell>Fecha</Table.HeadCell>
@@ -27,7 +35,7 @@ function Index({ auth, reports }: any) {
             </Table.HeadCell>
           </Table.Head>
           <Table.Body className="divide-y">
-            {reports.map((r: any) => (
+            {reports.map((r) => (
               <Table.Row
                 key={r.id}
                 className={`dark:border-gray-700 dark:bg-gray-800 ${
@@ -41,6 +49,9 @@ function Index({ auth, reports }: any) {
                 </Table.Cell>
                 <Table.Cell>{formatDescription(r.description)}</Table.Cell>
                 <Table.Cell>{r.user.fullname}</Table.Cell>
+                <Table.Cell>
+                  {r.report_sub_category?.name || "Sin categoría"}
+                </Table.Cell>
                 <Table.Cell>{r.emergency ? "Sí" : "No"}</Table.Cell>
                 <Table.Cell>{r.state ? "Atendido" : "Pendiente"}</Table.Cell>
                 <Table.Cell>{r.created_at}</Table.Cell>

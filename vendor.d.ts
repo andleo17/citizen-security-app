@@ -45,8 +45,8 @@ type User = {
   password: string;
   role: UserRole;
   remember_token?: string;
-  created_at: string;
-  updated_at: string;
+  created_at?: string;
+  updated_at?: string;
   deleted_at?: string;
   reports?: Report[];
   patrols?: Patrol[];
@@ -56,19 +56,19 @@ type ReportCategory = {
   id: number;
   name: string;
   description?: string;
-  created_at: string;
-  updated_at: string;
-  report_subcategories?: ReportSubCategory[];
+  created_at?: string;
+  updated_at?: string;
+  sub_categories?: ReportSubCategory[];
 };
 
 type ReportSubCategory = {
   id: number;
   name: string;
   description?: string;
-  created_at: string;
-  updated_at: string;
+  created_at?: string;
+  updated_at?: string;
   report_category_id: number;
-  report_category: ReportCategory;
+  report_category?: ReportCategory;
   reports?: Report[];
 };
 
@@ -79,8 +79,8 @@ type Report = {
   images?: string[];
   emergency: boolean;
   state: boolean;
-  created_at: string;
-  updated_at: string;
+  created_at?: string;
+  updated_at?: string;
   user_id: number;
   report_sub_category_id?: number;
   user: User;
@@ -91,16 +91,16 @@ type Zone = {
   id: number;
   name: string;
   area: Polygon;
-  created_at: string;
-  updated_at: string;
+  created_at?: string;
+  updated_at?: string;
   patrols?: Patrol[];
 };
 
 type Car = {
   id: number;
   licensePlate: string;
-  created_at: string;
-  updated_at: string;
+  created_at?: string;
+  updated_at?: string;
   deleted_at?: string;
   patrols?: Patrol[];
 };
@@ -115,12 +115,12 @@ type Patrol = {
   location?: Point;
   started_at?: string;
   finished_at?: string;
-  created_at: string;
-  updated_at: string;
+  created_at?: string;
+  updated_at?: string;
   user_id: number;
   car_id: number;
   zone_id: number;
-  user: User;
-  car: Car;
-  zone: Zone;
+  user?: User;
+  car?: Car;
+  zone?: Zone;
 };

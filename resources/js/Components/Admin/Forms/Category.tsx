@@ -1,43 +1,71 @@
+import type { FormEvent } from "react";
+import type { ReportCategory } from "vendor";
+
 import TextAreaInput from "@/Components/Common/Forms/TextAreaInput";
 import TextInput from "@/Components/Common/Forms/TextInput";
-import { Link, useForm } from "@inertiajs/react";
+import { useForm } from "@inertiajs/react";
 import { Button, Table } from "flowbite-react";
-import { useEffect } from "react";
-import { FormEventHandler } from "react";
 
 interface CategoryFormProps {
-  category?: any;
+  category?: ReportCategory;
 }
 
-function CategoryForm({ category }: CategoryFormProps) {
+function useCategoryForm(category: ReportCategory) {
   const { data, setData, post, processing, errors, put } = useForm({
     name: category?.name || "",
     description: category?.description || "",
     subCategories: category?.sub_categories || [],
   });
 
-  const handleSubmit: FormEventHandler<HTMLFormElement> = (e) => {
+  function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (category) {
       put(route("admin.categories.update", { id: category.id }));
     } else {
       post(route("admin.categories.store"));
     }
-  };
+  }
 
-  const handleAddSubCategory = () => {
+  function handleAddSubCategory() {
     setData("subCategories", [
       ...data.subCategories,
-      { id: Date.now(), name: "", description: "" },
+      {
+        id: Date.now(),
+        name: "",
+        description: "",
+        report_category_id: category.id,
+      },
     ]);
-  };
+  }
 
-  const handleDeleteSubCategory = (id: number) => {
+  function handleDeleteSubCategory(id: number) {
     setData(
       "subCategories",
       data.subCategories.filter((s: any) => s.id !== id)
     );
+  }
+
+  return {
+    data,
+    setData,
+    processing,
+    errors,
+    handleSubmit,
+    handleAddSubCategory,
+    handleDeleteSubCategory,
   };
+}
+
+function CategoryForm({ category }: CategoryFormProps) {
+  const {
+    data,
+    setData,
+    processing,
+    errors,
+    handleSubmit,
+    handleAddSubCategory,
+    handleDeleteSubCategory,
+  } = useCategoryForm(category);
 
   return (
     <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
@@ -74,39 +102,37 @@ function CategoryForm({ category }: CategoryFormProps) {
             </Table.HeadCell>
           </Table.Head>
           <Table.Body className="divide-y">
-            {data.subCategories.map((s: any) => (
+            {data.subCategories.map((s) => (
               <Table.Row
                 key={s.id}
                 className="bg-white dark:border-gray-700 dark:bg-gray-800"
               >
-                <Table.Cell>
-                  <TextInput
-                    placeholder="Ingrese un nombre"
-                    value={s.name}
-                    onChange={(e) => {
-                      const newSubcategory = [...data.subCategories];
-                      const cell = newSubcategory.find(
-                        (ss: any) => ss.id === s.id
-                      );
-                      cell.name = e.target.value;
-                      setData("subCategories", newSubcategory);
-                    }}
-                  />
-                </Table.Cell>
-                <Table.Cell>
-                  <TextAreaInput
-                    placeholder="Ingrese una descripción"
-                    value={s.description}
-                    onChange={(e) => {
-                      const newSubcategory = [...data.subCategories];
-                      const cell = newSubcategory.find(
-                        (ss: any) => ss.id === s.id
-                      );
-                      cell.description = e.target.value;
-                      setData("subCategories", newSubcategory);
-                    }}
-                  />
-                </Table.Cell>
+                <Table.Cell
+                  onBlur={(e) => {
+                    const newSubcategory = [...data.subCategories];
+                    const cell = newSubcategory.find(
+                      (ss: any) => ss.id === s.id
+                    );
+                    cell.name = e.currentTarget.innerText;
+                    setData("subCategories", newSubcategory);
+                  }}
+                  children={s.name}
+                  contentEditable
+                  suppressContentEditableWarning
+                />
+                <Table.Cell
+                  onBlur={(e) => {
+                    const newSubcategory = [...data.subCategories];
+                    const cell = newSubcategory.find(
+                      (ss: any) => ss.id === s.id
+                    );
+                    cell.description = e.currentTarget.innerText;
+                    setData("subCategories", newSubcategory);
+                  }}
+                  children={s.description}
+                  contentEditable
+                  suppressContentEditableWarning
+                />
                 <Table.Cell>
                   <Button
                     color="failure"

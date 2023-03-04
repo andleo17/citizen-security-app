@@ -23,7 +23,7 @@ class ReportController extends Controller
   {
     $reports = Report::orderBy('state', 'asc')
       ->orderBy('created_at', 'desc')
-      ->with('user')
+      ->with('user', 'reportSubCategory')
       ->withCasts(['created_at' => TimeAgo::class])
       ->get();
     return Inertia::render('Admin/Reports/Index', ['reports' => $reports]);
@@ -47,27 +47,7 @@ class ReportController extends Controller
    */
   public function store(StoreReportRequest $request)
   {
-    $report = new Report();
-
-    $report->location = Geometry::toPoint($request->location);
-    $report->description = $request->description;
-    $report->emergency = $request->emergency;
-    $report->user_id = $request->user()->id;
-
-    if ($request->hasFile('photos')) {
-      $photos_paths = [];
-      foreach ($request->file('photos') as $photo) {
-        $path = $photo->store('images/reports');
-        array_push($photos_paths, str_replace('images', 'storage', $path));
-      }
-      $report->images =  $photos_paths;
-    }
-
-    $report->save();
-
-    event(new NewReport($report->load('user')));
-
-    return redirect()->route('reports.index');
+    //
   }
 
   /**
@@ -108,8 +88,6 @@ class ReportController extends Controller
     $report->state = $request->state;
     $report->save();
 
-    event(new NewReport($report));
-
     return redirect()->route('admin.reports.index');
   }
 
@@ -122,15 +100,5 @@ class ReportController extends Controller
   public function destroy(Report $report)
   {
     //
-  }
-
-  public function attend(Report $report)
-  {
-    $report->state = true;
-    $report->save();
-
-    event(new NewReport($report));
-
-    return;
   }
 }

@@ -1,3 +1,5 @@
+import type { Report, ReportCategory } from "vendor";
+
 import Label from "@/Components/Common/Forms/Label";
 import SelectInput from "@/Components/Common/Forms/SelectInput";
 import TextAreaInput from "@/Components/Common/Forms/TextAreaInput";
@@ -11,8 +13,8 @@ import { Button, ToggleSwitch } from "flowbite-react";
 import { FormEventHandler, useState } from "react";
 
 interface ReportFormProps {
-  report: any;
-  categories: any[];
+  report: Report;
+  categories: ReportCategory[];
 }
 
 function ReportForm({ report, categories }: ReportFormProps) {
@@ -65,8 +67,8 @@ function ReportForm({ report, categories }: ReportFormProps) {
           required
         >
           {categories
-            .find((c: any) => c.id === data.category)
-            ?.sub_categories?.map((c: any) => (
+            .find((c) => c.id === data.category)
+            ?.sub_categories?.map((c) => (
               <SelectInput.Item key={c.id} value={c.id}>
                 {c.name}
               </SelectInput.Item>

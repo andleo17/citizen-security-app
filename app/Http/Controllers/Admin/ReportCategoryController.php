@@ -17,7 +17,9 @@ class ReportCategoryController extends Controller
    */
   public function index()
   {
-    return Inertia::render('Admin/Categories/Index', ['categories' => ReportCategory::all()]);
+    return Inertia::render('Admin/Categories/Index', [
+      'categories' => ReportCategory::all()
+    ]);
   }
 
   /**
@@ -33,7 +35,10 @@ class ReportCategoryController extends Controller
    */
   public function store(StoreReportCategoryRequest $request)
   {
-    $category = new ReportCategory($request->all());
+    $category = new ReportCategory();
+    $category->name = $request->name;
+    $category->description = $request->description;
+
     $category->save();
 
     return redirect()->route('admin.categories.edit', $category);
@@ -55,7 +60,9 @@ class ReportCategoryController extends Controller
    */
   public function edit(ReportCategory $category): Response
   {
-    return Inertia::render('Admin/Categories/Edit', ['category' => $category->load('subCategories')]);
+    return Inertia::render('Admin/Categories/Edit', [
+      'category' => $category->load('subCategories')
+    ]);
   }
 
   /**

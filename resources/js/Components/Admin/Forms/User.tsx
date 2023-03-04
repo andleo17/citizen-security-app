@@ -1,11 +1,13 @@
+import type { User } from "vendor";
+
 import SelectInput from "@/Components/Common/Forms/SelectInput";
 import TextInput from "@/Components/Common/Forms/TextInput";
 import { useForm } from "@inertiajs/react";
-import { Button, ToggleSwitch } from "flowbite-react";
+import { Button } from "flowbite-react";
 import { FormEventHandler, useEffect } from "react";
 
 interface UserFormProps {
-  user?: any;
+  user?: User;
 }
 
 function UserForm({ user }: UserFormProps) {
@@ -19,7 +21,6 @@ function UserForm({ user }: UserFormProps) {
       role: user?.role || "Citizen",
       password: "",
       password_confirmation: "",
-      state: user?.state || true,
     });
 
   useEffect(() => {
@@ -123,11 +124,6 @@ function UserForm({ user }: UserFormProps) {
           onChange={(e) => setData("password", e.target.value)}
         />
       )}
-      <ToggleSwitch
-        checked={data.state}
-        label="Activo"
-        onChange={(e) => setData("state", e)}
-      />
       <Button type="submit" disabled={processing}>
         Guardar
       </Button>

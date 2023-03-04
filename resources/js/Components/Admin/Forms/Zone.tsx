@@ -1,17 +1,19 @@
+import type { Zone } from "vendor";
+
 import TextInput from "@/Components/Common/Forms/TextInput";
 import Area from "@/Components/Maps/Area";
 import DrawManager, { OverlayType } from "@/Components/Maps/DrawManager";
 import Map, { MapWrapper } from "@/Components/Maps/Map";
 import { polygonToJson } from "@/Utils/Geometry";
 import { useForm } from "@inertiajs/react";
-import { Button, Label, ToggleSwitch } from "flowbite-react";
-import { FormEventHandler } from "react";
+import { Button, Label } from "flowbite-react";
+import { FormEvent, FormEventHandler } from "react";
 
 interface ZoneFormProps {
-  zone?: any;
+  zone?: Zone;
 }
 
-function ZoneForm({ zone }: ZoneFormProps) {
+function useZoneForm(zone?: Zone) {
   const { data, setData, post, processing, errors, put } = useForm({
     name: zone?.name || "",
     area: polygonToJson(zone?.area) || [],
@@ -28,21 +30,43 @@ function ZoneForm({ zone }: ZoneFormProps) {
     setData("area", polygonPoints);
   }
 
-  const handleSubmit: FormEventHandler<HTMLFormElement> = (e) => {
+  function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (zone) {
       put(route("admin.zones.update", { id: zone.id }));
     } else {
       post(route("admin.zones.store"));
     }
-  };
+  }
 
-  const handlePolygonComplete = (e: any) => {
+  function handlePolygonComplete(e: any) {
     if (e.type === "polygon") {
       setPolygonData(e.overlay);
       e.overlay.setMap(null);
     }
+  }
+
+  return {
+    data,
+    setData,
+    processing,
+    errors,
+    setPolygonData,
+    handleSubmit,
+    handlePolygonComplete,
   };
+}
+
+function ZoneForm({ zone }: ZoneFormProps) {
+  const {
+    data,
+    setData,
+    processing,
+    errors,
+    setPolygonData,
+    handleSubmit,
+    handlePolygonComplete,
+  } = useZoneForm(zone);
 
   return (
     <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
@@ -52,6 +76,7 @@ function ZoneForm({ zone }: ZoneFormProps) {
         placeholder="Zona norte"
         value={data.name}
         onChange={(e) => setData("name", e.target.value)}
+        errors={errors.name}
         required
       />
       <div>

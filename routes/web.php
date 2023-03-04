@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\DriverController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\ReportController;
+use App\Http\Controllers\UserReportController;
 use App\Models\Car;
 use App\Models\Report;
 use App\Models\Zone;
@@ -11,11 +11,11 @@ use Inertia\Inertia;
 
 Route::middleware('auth')->group(function () {
   Route::get('/', fn () => Inertia::render('Main'))->name('index');
-  Route::get('/reports', fn () => Inertia::render('Reports/Index', [
-    'reports' => auth()->user()->reports->load('reportSubCategory')->sortBy([['state', 'asc'], ['created_at', 'desc'],])->values()
-  ]))->name('reports.index');
-  Route::post('/reports', [ReportController::class, 'store'])->name('reports.store');
-  Route::post('/reports/attend/{report}', [ReportController::class, 'attend'])->name('reports.attend');
+
+  Route::get('/reports', [UserReportController::class, 'index'])->name('reports.index');
+  Route::post('/reports', [UserReportController::class, 'store'])->name('reports.store');
+  Route::post('/reports/attend/{report}', [UserReportController::class, 'attend'])->name('reports.attend');
+
   Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
   Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
   Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -24,7 +24,6 @@ Route::middleware('auth')->group(function () {
 Route::middleware(['auth', 'access:Police'])->group(function () {
   Route::get('watch', fn () => Inertia::render('Watch', [
     'reports' => Report::where('state', 'false')->with('user')->get(),
-    'cars' => Car::has('user')->get(),
     'zones' => Zone::all(),
   ]))->name('watch');
 

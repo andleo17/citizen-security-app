@@ -1,9 +1,16 @@
+import type { Car, User } from "vendor";
+
 import NavLink from "@/Components/Common/NavLink";
 import AdminLayout from "@/Layouts/AdminLayout";
 import { Head, Link } from "@inertiajs/react";
 import { Table } from "flowbite-react";
 
-function Index({ auth, cars }: any) {
+interface IndexProps {
+  auth: { user: User };
+  cars: Car[];
+}
+
+function Index({ auth, cars }: IndexProps) {
   return (
     <AdminLayout auth={auth}>
       <Head title="Lista de carros" />
@@ -18,7 +25,6 @@ function Index({ auth, cars }: any) {
           <Table.Head>
             <Table.HeadCell>ID</Table.HeadCell>
             <Table.HeadCell>Placa</Table.HeadCell>
-            <Table.HeadCell>Chofer</Table.HeadCell>
             <Table.HeadCell>
               <span className="sr-only">Editar</span>
             </Table.HeadCell>
@@ -27,7 +33,7 @@ function Index({ auth, cars }: any) {
             </Table.HeadCell>
           </Table.Head>
           <Table.Body className="divide-y">
-            {cars.map((z: any) => (
+            {cars.map((z) => (
               <Table.Row
                 key={z.id}
                 className="bg-white dark:border-gray-700 dark:bg-gray-800"
@@ -36,7 +42,6 @@ function Index({ auth, cars }: any) {
                   {z.id}
                 </Table.Cell>
                 <Table.Cell>{z.licensePlate}</Table.Cell>
-                <Table.Cell>{z.user?.fullname || "Sin conductor"}</Table.Cell>
                 <Table.Cell>
                   <Link
                     href={route("admin.cars.edit", z.id)}

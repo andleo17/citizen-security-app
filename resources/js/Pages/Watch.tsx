@@ -1,8 +1,9 @@
+import type { Car, Report, User, Zone } from "vendor";
+
 import Label from "@/Components/Common/Forms/Label";
 import TextAreaInput from "@/Components/Common/Forms/TextAreaInput";
 import TextInput from "@/Components/Common/Forms/TextInput";
 import Modal from "@/Components/Common/Modal";
-import NavLink from "@/Components/Common/NavLink";
 import CarLocation from "@/Components/Main/CarLocation";
 import ReportMarker from "@/Components/Main/ReportMarker";
 import Area from "@/Components/Maps/Area";
@@ -11,13 +12,13 @@ import AppLayout from "@/Layouts/AppLayout";
 import { polygonToJson } from "@/Utils/Geometry";
 import { Head, Link } from "@inertiajs/react";
 import { useEffect, useState } from "react";
-import { Report, User } from "vendor";
+import useSound from "@/Hooks/UseSound";
 
 interface WatchProps {
   auth: { user: User };
   reports: Report[];
-  cars: any[];
-  zones: any[];
+  cars: Car[];
+  zones: Zone[];
 }
 
 function getDefaultLocation() {
@@ -29,53 +30,25 @@ function getDefaultLocation() {
 function Watch(props: WatchProps) {
   const [reports, setReports] = useState(props.reports);
   const [selectedReport, setSelectedReport] = useState<Report>();
-  const [audio, setAudio] = useState<HTMLAudioElement>();
-
-  function updateReport(report: Report) {
-    const newReports = [...reports];
-    const reportIndex = newReports.findIndex((r: any) => r.id === report.id);
-
-    if (reportIndex === -1 && !report.state) {
-      newReports.push(report);
-      setReports(() => newReports);
-      return;
-    }
-
-    if (report.state) {
-      setReports(() => newReports.filter((r: any) => r.id !== report.id));
-      return;
-    }
-  }
+  const setPlay = useSound(
+    "https://cdn.videvo.net/videvo_files/audio/premium/audio0022/watermarked/AlarmBurglar%206010_04_preview.mp3"
+  );
 
   useEffect(() => {
-    const newAudio = new Audio(
-      "https://cdn.videvo.net/videvo_files/audio/premium/audio0022/watermarked/AlarmBurglar%206010_04_preview.mp3"
-    );
-    newAudio.loop = true;
-    setAudio(newAudio);
-
     Echo.channel("reports").listen(
       ".watch.reports",
       function ({ report }: { report: Report }) {
-        updateReport(report);
+        setReports([...reports, report]);
       }
     );
 
-    function playAlertSound() {
-      reports.length > 0 ? newAudio.play() : newAudio.pause();
-    }
-
-    document.addEventListener("focusin", playAlertSound);
-
     return () => {
       Echo.leaveChannel("reports");
-      newAudio.pause();
-      document.removeEventListener("focusin", playAlertSound);
     };
   }, []);
 
   useEffect(() => {
-    if (audio) reports.length > 0 ? audio.play() : audio.pause();
+    reports.length > 0 ? setPlay(true) : setPlay(false);
   }, [reports]);
 
   return (
@@ -145,6 +118,7 @@ function Watch(props: WatchProps) {
               as="button"
               className="text-white focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 focus:outline-none bg-green-700 hover:bg-green-800 focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
               onSuccess={() => {
+                setReports(reports.filter((r) => r.id !== selectedReport.id));
                 setSelectedReport(null);
               }}
             >
