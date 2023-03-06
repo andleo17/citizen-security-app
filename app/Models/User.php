@@ -5,12 +5,14 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
 use App\Enums\UserRole;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Carbon;
 use Laravel\Sanctum\HasApiTokens;
 
 /** @typescript **/
@@ -61,14 +63,28 @@ class User extends Authenticatable
     );
   }
 
-  protected function reports()
+  public function reports()
   {
     return $this->hasMany(Report::class);
   }
 
-  protected function patrols(): HasMany
+  public function patrols(): HasMany
   {
     return $this->hasMany(Patrol::class);
+  }
+
+  public function currentPatrol()
+  {
+    $tolerance = 20;
+    $now = Carbon::now();
+
+    return $this->patrols()
+      ->where('start_at', '>=', $now->subMinutes($tolerance))
+      ->orWhere(
+        fn (Builder $query) => $query
+          ->whereNotNull('started_at')
+          ->whereNull('finished_at')
+      )->first();
   }
 
   public function hasRole(string $role): bool

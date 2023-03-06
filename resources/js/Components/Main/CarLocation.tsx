@@ -1,3 +1,5 @@
+import type { Patrol } from "vendor";
+
 import { Fragment, useEffect, useState } from "react";
 import Marker from "../Maps/Marker";
 import truckIcon from "@icons/truck-icon.svg";
@@ -5,57 +7,65 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { lineStringtoJson, pointToJson } from "@/Utils/Geometry";
 import Polyline from "../Maps/Polyline";
 
-function TruckInfo({ car }: any) {
+interface CarLocationProps {
+  map?: google.maps.Map;
+  initialPatrols: Patrol[];
+}
+
+function PatrolInfo({ patrol }: { patrol: Patrol }) {
   return (
     <p className="font-bold">
       <span className="font-extrabold mr-2">Placa:</span>
-      {car.licensePlate}
+      {patrol.car.licensePlate}
     </p>
   );
 }
 
-function CarLocation({ map, initialCars }: any) {
-  const [cars, setCars] = useState(initialCars);
+function CarLocation({ map, initialPatrols }: CarLocationProps) {
+  const [patrols, setPatrols] = useState(initialPatrols);
 
   useEffect(() => {
-    Echo.channel("cars").listen(".car.location", function ({ car }: any) {
-      const newCars = [...cars];
-      const currentTruckIndex = newCars.findIndex((t: any) => t.id === car.id);
-      if (currentTruckIndex !== -1) {
-        if (car.user_id) {
-          newCars[currentTruckIndex].location = car.location;
+    Echo.channel("patrols").listen(
+      ".patrol.location",
+      function ({ patrol }: { patrol: Patrol }) {
+        const newPatrols = [...patrols];
+        const currentPatrol = newPatrols.findIndex((t) => t.id === patrol.id);
+        if (currentPatrol !== -1) {
+          if (patrol.user_id) {
+            newPatrols[currentPatrol].location = patrol.location;
 
-          setCars(newCars);
+            setPatrols(newPatrols);
+          } else {
+            setPatrols(newPatrols.filter((t) => t.id !== patrol.id));
+          }
         } else {
-          setCars(newCars.filter((t) => t.id !== car.id));
+          newPatrols.push(patrol);
+          setPatrols(newPatrols);
         }
-      } else {
-        newCars.push(car);
-        setCars(newCars);
       }
-    });
+    );
 
     return () => {
-      Echo.leaveChannel("cars");
+      Echo.leaveChannel("patrols");
     };
   }, []);
 
   return (
     <>
-      {cars?.map((t: any) => (
-        <Fragment key={t.id}>
+      {patrols?.map((p) => (
+        <Fragment key={p.id}>
           <Marker
-            key={t.id}
+            key={p.id}
             icon={{
               url: truckIcon,
               scaledSize: new google.maps.Size(50, 50),
             }}
-            position={pointToJson(t.location)}
-            displayHTML={renderToStaticMarkup(<TruckInfo car={t} />)}
+            position={pointToJson(p.location)}
+            displayHTML={renderToStaticMarkup(<PatrolInfo patrol={p} />)}
             map={map}
           />
           <Polyline
-            path={lineStringtoJson(t.route)}
+            path={lineStringtoJson(p.route)}
             map={map}
             strokeColor={"#add8ff"}
             strokeWeight={6}
@@ -68,4 +78,3 @@ function CarLocation({ map, initialCars }: any) {
 }
 
 export default CarLocation;
-

@@ -45,7 +45,7 @@ function Menu({ user }: any) {
           </Dropdown.Link>
         )}
         {user.role !== "Citizen" && (
-          <Dropdown.Link href={route("driver.location")} icon={DriverIcon}>
+          <Dropdown.Link href={route("patrol.index")} icon={DriverIcon}>
             Conductor
           </Dropdown.Link>
         )}

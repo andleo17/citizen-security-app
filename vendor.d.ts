@@ -115,6 +115,9 @@ type Patrol = {
   location?: Point;
   started_at?: string;
   finished_at?: string;
+  started: boolean;
+  finished: boolean;
+  is_current: boolean;
   created_at?: string;
   updated_at?: string;
   user_id: number;
@@ -124,3 +127,4 @@ type Patrol = {
   car?: Car;
   zone?: Zone;
 };
+

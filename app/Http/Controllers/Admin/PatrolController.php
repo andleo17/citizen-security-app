@@ -27,7 +27,10 @@ class PatrolController extends Controller
       'patrolsInDay' => Patrol::whereDate('start_at', $now->toDate())
         ->orWhereDate('end_at', $now->toDate())
         ->with('user', 'zone', 'car')
-        ->get(),
+        ->orderBy('start_at')
+        ->get()
+        ->sortByDesc('isCurrent')
+        ->values()
     ]);
   }
 

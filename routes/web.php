@@ -1,9 +1,10 @@
 <?php
 
-use App\Http\Controllers\DriverController;
+use App\Http\Controllers\PatrolScheduleController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserReportController;
-use App\Models\Car;
+use App\Http\Controllers\WatchController;
+use App\Models\Patrol;
 use App\Models\Report;
 use App\Models\Zone;
 use Illuminate\Support\Facades\Route;
@@ -22,16 +23,13 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware(['auth', 'access:Police'])->group(function () {
-  Route::get('watch', fn () => Inertia::render('Watch', [
-    'reports' => Report::where('state', 'false')->with('user')->get(),
-    'zones' => Zone::all(),
-  ]))->name('watch');
+  Route::get('watch', WatchController::class)->name('watch');
 
-  Route::get('driver', [DriverController::class, 'index'])->name('driver.location');
-  Route::get('driver/car', [DriverController::class, 'edit'])->name('driver.car.edit');
-  Route::put('driver/car/{car}', [DriverController::class, 'update'])->name('driver.car.update');
-  Route::delete('driver/car/{car}', [DriverController::class, 'destroy'])->name('driver.car.destroy');
-  Route::put('driver/car/{car}/location', [DriverController::class, 'updatePosition'])->name('driver.car.location');
+  Route::get('patrol', [PatrolScheduleController::class, 'index'])->name('patrol.index');
+  Route::post('patrol', [PatrolScheduleController::class, 'start'])->name('patrol.start');
+  Route::put('patrol', [PatrolScheduleController::class, 'updatePosition'])->name('patrol.location');
+  Route::delete('patrol', [PatrolScheduleController::class, 'finish'])->name('patrol.finish');
+  Route::get('patrol/schedules', [PatrolScheduleController::class, 'schedules'])->name('patrol.schedules');
 });
 
 require __DIR__ . '/auth.php';

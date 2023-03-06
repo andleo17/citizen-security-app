@@ -1,4 +1,4 @@
-import type { Car, Report, User, Zone } from "vendor";
+import type { Patrol, Report, User, Zone } from "vendor";
 
 import Label from "@/Components/Common/Forms/Label";
 import TextAreaInput from "@/Components/Common/Forms/TextAreaInput";
@@ -17,7 +17,7 @@ import useSound from "@/Hooks/UseSound";
 interface WatchProps {
   auth: { user: User };
   reports: Report[];
-  cars: Car[];
+  patrols: Patrol[];
   zones: Zone[];
 }
 
@@ -66,7 +66,7 @@ function Watch(props: WatchProps) {
           {props.zones.map((z: any) => (
             <Area key={z.id} paths={polygonToJson(z.area)} />
           ))}
-          <CarLocation initialCars={props.cars} />
+          <CarLocation initialPatrols={props.patrols} />
         </Map>
       </MapWrapper>
       <Modal show={!!selectedReport} onClose={() => setSelectedReport(null)}>

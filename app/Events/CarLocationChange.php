@@ -3,6 +3,7 @@
 namespace App\Events;
 
 use App\Models\Car;
+use App\Models\Patrol;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
@@ -18,7 +19,7 @@ class CarLocationChange implements ShouldBroadcast
    *
    * @return void
    */
-  public function __construct(public Car $car)
+  public function __construct(public Patrol $patrol)
   {
   }
 
@@ -29,11 +30,11 @@ class CarLocationChange implements ShouldBroadcast
    */
   public function broadcastOn()
   {
-    return new Channel('cars');
+    return new Channel('patrols');
   }
 
   public function broadcastAs(): string
   {
-    return 'car.location';
+    return 'patrol.location';
   }
 }

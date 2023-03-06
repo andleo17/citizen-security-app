@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -22,6 +24,29 @@ class Patrol extends Model
     'started_at' => 'timestamp',
     'finished_at' => 'timestamp',
   ];
+
+  protected $appends = ['started', 'finished', 'is_current'];
+
+  protected function started(): Attribute
+  {
+    return Attribute::make(
+      get: fn ($value, $attributes) => !is_null($attributes['started_at'])
+    );
+  }
+
+  protected function finished(): Attribute
+  {
+    return Attribute::make(
+      get: fn ($value, $attributes) => !is_null($attributes['finished_at'])
+    );
+  }
+
+  protected function isCurrent(): Attribute
+  {
+    return Attribute::make(
+      get: fn () => $this->started && !$this->finished
+    );
+  }
 
   public function user(): BelongsTo
   {

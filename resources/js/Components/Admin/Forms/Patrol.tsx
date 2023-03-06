@@ -10,6 +10,7 @@ import { Button, Label } from "flowbite-react";
 import { FormEvent } from "react";
 import SelectInput from "@/Components/Common/Forms/SelectInput";
 import Area from "@/Components/Maps/Area";
+import dayjs from "dayjs";
 
 interface PatrolFormProps {
   patrol?: Patrol;
@@ -18,10 +19,12 @@ interface PatrolFormProps {
   cars: Car[];
 }
 
+const formatTemplate = "YYYY-MM-DDTHH:mm";
+
 function usePatrolForm(patrol?: Patrol) {
   const { data, setData, put, post, errors, processing, transform } = useForm({
-    start_at: patrol?.start_at || new Date().toISOString().replace("Z", ""),
-    end_at: patrol?.end_at || new Date().toISOString().replace("Z", ""),
+    start_at: patrol?.start_at || dayjs().format(formatTemplate),
+    end_at: patrol?.end_at || dayjs().add(1, "hours").format(formatTemplate),
     route: lineStringtoJson(patrol?.route) || [],
     user_id: patrol?.user_id || -1,
     car_id: patrol?.car_id || -1,
@@ -99,7 +102,7 @@ function PatrolForm({ patrol, zones, drivers, cars }: PatrolFormProps) {
       <TextInput
         id="end_at"
         type="datetime-local"
-        labelText="Fecha de inicio"
+        labelText="Fecha de finalización"
         value={data.end_at}
         onChange={(e) => setData("end_at", e.target.value)}
         errors={errors.end_at}

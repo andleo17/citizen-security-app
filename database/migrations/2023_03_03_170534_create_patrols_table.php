@@ -15,8 +15,8 @@ return new class extends Migration
       $table->id();
       $table->integer('rounds')->default(0);
       $table->float('distance')->default(0);
-      $table->dateTime('start_at');
-      $table->dateTime('end_at');
+      $table->timestamp('start_at');
+      $table->timestamp('end_at');
       $table->lineString('route')->nullable();
       $table->point('location')->nullable();
       $table->timestamp('started_at')->nullable();

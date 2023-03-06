@@ -14,6 +14,7 @@ interface IndexProps {
 
 function Index({ auth, patrolsInDay }: IndexProps) {
   const [patrols, setPatrols] = useState(patrolsInDay);
+  console.log(patrols);
 
   return (
     <AdminLayout auth={auth}>
@@ -25,7 +26,7 @@ function Index({ auth, patrolsInDay }: IndexProps) {
         </NavLink>
       </div>
       {patrols.length > 0 ? (
-        <div className="grid grid-cols-3">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
           {patrols.map((p) => (
             <PatrolItem key={p.id} patrol={p} />
           ))}
