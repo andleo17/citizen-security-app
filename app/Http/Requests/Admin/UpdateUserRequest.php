@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Admin;
 
 use App\Enums\UserRole;
 use App\Models\User;
@@ -8,7 +8,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules;
 use Illuminate\Validation\Rules\Enum;
 
-class StoreUserRequest extends FormRequest
+class UpdateUserRequest extends FormRequest
 {
   /**
    * Determine if the user is authorized to make this request.
@@ -28,12 +28,12 @@ class StoreUserRequest extends FormRequest
   public function rules()
   {
     return [
-      'dni' => 'required|string|max:8|unique:' . User::class,
+      'dni' => 'required|string|max:8',
       'name' => 'required|string|max:255',
       'lastname' => 'required|string|max:255',
-      'email' => 'required|string|email|max:255|unique:' . User::class,
+      'email' => 'required|string|email|max:255',
       'role' => ['required', new Enum(UserRole::class)],
-      'password' => ['required', 'confirmed', Rules\Password::defaults()],
+      'password' => ['nullable', 'confirmed', Rules\Password::defaults()],
     ];
   }
 }

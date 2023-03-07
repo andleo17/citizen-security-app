@@ -4,9 +4,6 @@ use App\Http\Controllers\PatrolScheduleController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserReportController;
 use App\Http\Controllers\WatchController;
-use App\Models\Patrol;
-use App\Models\Report;
-use App\Models\Zone;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -18,7 +15,7 @@ Route::middleware('auth')->group(function () {
   Route::post('/reports/attend/{report}', [UserReportController::class, 'attend'])->name('reports.attend');
 
   Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-  Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+  Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
   Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 

@@ -3,31 +3,35 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreUserRequest;
-use App\Http\Requests\UpdateUserRequest;
+use App\Http\Requests\Admin\StoreUserRequest;
+use App\Http\Requests\Admin\UpdateUserRequest;
 use App\Models\User;
-use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class UserController extends Controller
 {
   /**
    * Display a listing of the resource.
    *
-   * @return \Illuminate\Http\Response
+   * @return \Inertia\Response
    */
-  public function index()
+  public function index(): Response
   {
-    return Inertia::render('Admin/Users/Index', ['users' => User::all()]);
+    return Inertia::render('Admin/Users/Index', [
+      'users' => User::all()
+    ]);
   }
 
   /**
    * Show the form for creating a new resource.
    *
-   * @return \Illuminate\Http\Response
+   * @return \Inertia\Response
    */
-  public function create()
+  public function create(): Response
   {
     return Inertia::render('Admin/Users/Create');
   }
@@ -35,10 +39,10 @@ class UserController extends Controller
   /**
    * Store a newly created resource in storage.
    *
-   * @param  \App\Http\Requests\StoreUserRequest  $request
-   * @return \Illuminate\Http\Response
+   * @param \App\Http\Requests\Admin\StoreUserRequest $request
+   * @return \Illuminate\Http\RedirectResponse
    */
-  public function store(StoreUserRequest $request)
+  public function store(StoreUserRequest $request): RedirectResponse
   {
     $user = new User();
 
@@ -52,39 +56,30 @@ class UserController extends Controller
 
     $user->save();
 
-    return redirect()->route('admin.users.index');
-  }
-
-  /**
-   * Display the specified resource.
-   *
-   * @param  \App\Models\User  $user
-   * @return \Illuminate\Http\Response
-   */
-  public function show(User $user)
-  {
-    //
+    return Redirect::route('admin.users.index');
   }
 
   /**
    * Show the form for editing the specified resource.
    *
-   * @param  \App\Models\User  $user
-   * @return \Illuminate\Http\Response
+   * @param \App\Models\User $user
+   * @return \Inertia\Response
    */
-  public function edit(User $user)
+  public function edit(User $user): Response
   {
-    return Inertia::render('Admin/Users/Edit', ['user' => $user]);
+    return Inertia::render('Admin/Users/Edit', [
+      'user' => $user
+    ]);
   }
 
   /**
    * Update the specified resource in storage.
    *
-   * @param  \App\Http\Requests\UpdateUserRequest  $request
-   * @param  \App\Models\User  $user
-   * @return \Illuminate\Http\Response
+   * @param \App\Http\Requests\Admin\UpdateUserRequest $request
+   * @param \App\Models\User $user
+   * @return \Illuminate\Http\RedirectResponse
    */
-  public function update(UpdateUserRequest $request, User $user)
+  public function update(UpdateUserRequest $request, User $user): RedirectResponse
   {
     $user->dni = $request->dni;
     $user->name = $request->name;
@@ -96,18 +91,18 @@ class UserController extends Controller
 
     $user->save();
 
-    return redirect()->route('admin.users.index');
+    return Redirect::route('admin.users.index');
   }
 
   /**
    * Remove the specified resource from storage.
    *
-   * @param  \App\Models\User  $user
-   * @return \Illuminate\Http\Response
+   * @param \App\Models\User $user
+   * @return \Illuminate\Http\RedirectResponse
    */
-  public function destroy(User $user)
+  public function destroy(User $user): RedirectResponse
   {
     $user->delete();
-    return redirect()->route('admin.users.index');
+    return Redirect::route('admin.users.index');
   }
 }

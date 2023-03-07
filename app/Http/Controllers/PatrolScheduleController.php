@@ -3,17 +3,25 @@
 namespace App\Http\Controllers;
 
 use App\Events\CarLocationChange;
-use App\Models\Car;
+use App\Http\Requests\UpdatePositionRequest;
 use App\Utils\Geometry;
-use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Response as HttpResponse;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class PatrolScheduleController extends Controller
 {
-  public function index()
+  /**
+   * Show the emit location page.
+   *
+   * @return \Inertia\Response
+   */
+  public function index(): Response
   {
     $currentPatrol = Auth::user()->currentPatrol();
     return Inertia::render('Patrol/EmitLocation', [
@@ -21,44 +29,44 @@ class PatrolScheduleController extends Controller
     ]);
   }
 
-  public function start()
+  public function start(): JsonResponse
   {
     $currentPatrol = Auth::user()->currentPatrol();
     $currentPatrol->started_at = Carbon::now();
 
     $currentPatrol->save();
 
-    return Response::json(['message' => 'Patrol started', 'status' => true]);
+    return HttpResponse::json(['message' => 'Patrol started', 'status' => true]);
   }
 
-  public function updatePosition(Request $request)
+  public function updatePosition(UpdatePositionRequest $request): JsonResponse
   {
     $currentPatrol = Auth::user()->currentPatrol();
-    $currentPatrol->location = Geometry::toPoint($request->location);
+    $currentPatrol->location = Geometry::toPoint(json_encode($request->location));
     $currentPatrol->save();
 
-    event(new CarLocationChange($currentPatrol));
+    event(new CarLocationChange($currentPatrol->load('car')));
 
-    return response()->json(['message' => 'Patrol location updated']);
+    return HttpResponse::json(['message' => 'Patrol location updated']);
   }
 
-  public function finish()
+  public function finish(): RedirectResponse
   {
     $currentPatrol = Auth::user()->currentPatrol();
     $currentPatrol->finished_at = Carbon::now();
     $currentPatrol->save();
 
-    event(new CarLocationChange($currentPatrol));
+    event(new CarLocationChange($currentPatrol->load('car')));
 
-    return redirect()->route('patrol.location');
+    return Redirect::route('patrol.location');
   }
 
-  public function schedules()
+  public function schedules(): JsonResponse
   {
     $now = Carbon::now();
     $patrols = Auth::user()->patrols->whereDate('start_at', $now->toDate())
       ->orWhereDate('end_at', $now->toDate());
 
-    return Response::json($patrols);
+    return HttpResponse::json($patrols);
   }
 }

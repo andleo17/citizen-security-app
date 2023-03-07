@@ -11,6 +11,7 @@ import { pointToJson } from "@/Utils/Geometry";
 import { useForm } from "@inertiajs/react";
 import { Button, ToggleSwitch } from "flowbite-react";
 import { FormEventHandler, useState } from "react";
+import ReportMarker from "@/Components/Main/ReportMarker";
 
 interface ReportFormProps {
   report: Report;
@@ -125,7 +126,7 @@ function ReportForm({ report, categories }: ReportFormProps) {
               className="h-[450px]"
               streetViewControl={true}
             >
-              <Marker position={pointToJson(report.location)} />
+              <ReportMarker report={report} onClick={null} />
             </Map>
           </MapWrapper>
         </div>

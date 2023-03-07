@@ -29,10 +29,7 @@ export default function Main({ auth }: MainProps) {
 
   useEffect(() => {
     if (location)
-      setData(
-        "location",
-        JSON.stringify({ lat: location.latitude, lng: location.longitude })
-      );
+      setData("location", { lat: location.latitude, lng: location.longitude });
   }, [location]);
 
   return (
@@ -75,7 +72,7 @@ export default function Main({ auth }: MainProps) {
               maxValue={200}
               onSlideEnd={() => {
                 transform((prev) => ({
-                  ...data,
+                  ...prev,
                   description:
                     "¡Auxilio! Estoy en una emergencia. Necesito a las autoridades urgentemente.",
                   emergency: true,

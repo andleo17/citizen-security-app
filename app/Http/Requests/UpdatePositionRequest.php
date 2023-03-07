@@ -3,15 +3,17 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
-class StorePatrolRequest extends FormRequest
+class UpdatePositionRequest extends FormRequest
 {
   /**
    * Determine if the user is authorized to make this request.
    */
   public function authorize(): bool
   {
-    return true;
+    $user = Auth::user();
+    return $user->hasRole('Police') || $user->hasRole('Admin');
   }
 
   /**
@@ -22,7 +24,9 @@ class StorePatrolRequest extends FormRequest
   public function rules(): array
   {
     return [
-      //
+      'location' => 'required',
+      'location.lat' => 'required|numeric',
+      'location.lng' => 'required|numeric',
     ];
   }
 }

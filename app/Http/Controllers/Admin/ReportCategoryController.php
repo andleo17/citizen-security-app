@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreReportCategoryRequest;
-use App\Http\Requests\UpdateReportCategoryRequest;
+use App\Http\Requests\Admin\StoreReportCategoryRequest;
+use App\Http\Requests\Admin\UpdateReportCategoryRequest;
 use App\Models\ReportCategory;
 use App\Models\ReportSubCategory;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -14,8 +16,10 @@ class ReportCategoryController extends Controller
 {
   /**
    * Display a listing of the resource.
+   *
+   * @return \Inertia\Response
    */
-  public function index()
+  public function index(): Response
   {
     return Inertia::render('Admin/Categories/Index', [
       'categories' => ReportCategory::all()
@@ -24,16 +28,21 @@ class ReportCategoryController extends Controller
 
   /**
    * Show the form for creating a new resource.
+   *
+   * @return \Inertia\Response
    */
-  public function create()
+  public function create(): Response
   {
     return Inertia::render('Admin/Categories/Create');
   }
 
   /**
    * Store a newly created resource in storage.
+   *
+   * @param \App\Http\Requests\Admin\StoreReportCategoryRequest $request
+   * @return \Illuminate\Http\RedirectResponse
    */
-  public function store(StoreReportCategoryRequest $request)
+  public function store(StoreReportCategoryRequest $request): RedirectResponse
   {
     $category = new ReportCategory();
     $category->name = $request->name;
@@ -41,15 +50,7 @@ class ReportCategoryController extends Controller
 
     $category->save();
 
-    return redirect()->route('admin.categories.edit', $category);
-  }
-
-  /**
-   * Display the specified resource.
-   */
-  public function show(ReportCategory $category)
-  {
-    //
+    return Redirect::route('admin.categories.edit', $category);
   }
 
   /**
@@ -67,8 +68,12 @@ class ReportCategoryController extends Controller
 
   /**
    * Update the specified resource in storage.
+   *
+   * @param \App\Http\Requests\Admin\UpdateReportCategoryRequest $request
+   * @param \App\Models\ReportCategory $category
+   * @return \Illuminate\Http\RedirectResponse
    */
-  public function update(UpdateReportCategoryRequest $request, ReportCategory $category)
+  public function update(UpdateReportCategoryRequest $request, ReportCategory $category): RedirectResponse
   {
     $category->name = $request->name;
     $category->description = $request->description;
@@ -93,15 +98,18 @@ class ReportCategoryController extends Controller
 
     $category->save();
 
-    return redirect()->route('admin.categories.index');
+    return Redirect::route('admin.categories.index');
   }
 
   /**
    * Remove the specified resource from storage.
+   *
+   * @param \App\Models\ReportCategory $category
+   * @return \Illuminate\Http\RedirectResponse
    */
-  public function destroy(ReportCategory $category)
+  public function destroy(ReportCategory $category): RedirectResponse
   {
     $category->delete();
-    return redirect()->route('admin.categories.index');
+    return Redirect::route('admin.categories.index');
   }
 }

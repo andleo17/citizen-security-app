@@ -31,12 +31,11 @@ function CarLocation({ map, initialPatrols }: CarLocationProps) {
         const newPatrols = [...patrols];
         const currentPatrol = newPatrols.findIndex((t) => t.id === patrol.id);
         if (currentPatrol !== -1) {
-          if (patrol.user_id) {
-            newPatrols[currentPatrol].location = patrol.location;
-
-            setPatrols(newPatrols);
-          } else {
+          if (patrol.finished) {
             setPatrols(newPatrols.filter((t) => t.id !== patrol.id));
+          } else {
+            newPatrols[currentPatrol].location = patrol.location;
+            setPatrols(newPatrols);
           }
         } else {
           newPatrols.push(patrol);

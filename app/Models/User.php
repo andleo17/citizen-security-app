@@ -80,6 +80,7 @@ class User extends Authenticatable
 
     return $this->patrols()
       ->where('start_at', '>=', $now->subMinutes($tolerance))
+      ->whereNull('started_at')
       ->orWhere(
         fn (Builder $query) => $query
           ->whereNotNull('started_at')

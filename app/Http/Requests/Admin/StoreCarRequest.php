@@ -1,17 +1,19 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Admin;
 
+use App\Models\Car;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
-class UpdateReportCategoryRequest extends FormRequest
+class StoreCarRequest extends FormRequest
 {
   /**
    * Determine if the user is authorized to make this request.
    */
   public function authorize(): bool
   {
-    return true;
+    return Auth::user()->isAdmin();
   }
 
   /**
@@ -22,9 +24,7 @@ class UpdateReportCategoryRequest extends FormRequest
   public function rules(): array
   {
     return [
-      'name' => 'string|required',
-      'description' => 'string|nullable',
-      'subCategories' => 'array'
+      'licensePlate' => 'string|unique:' . Car::class,
     ];
   }
 }

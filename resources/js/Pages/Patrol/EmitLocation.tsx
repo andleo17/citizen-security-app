@@ -16,14 +16,10 @@ interface EmitLocationProps {
   patrol?: Patrol;
 }
 
-function finishPatrol(id: number) {
-  router.delete(route("patrol.finish", id));
-}
-
 function EmitLocation({ auth, patrol }: EmitLocationProps) {
   const [patrolStarted, setPatrolStart] = useState(patrol?.started);
   const { progress, ...longPress } = useLongPress(
-    () => finishPatrol(patrol.id),
+    () => router.delete(route("patrol.finish")),
     3000
   );
 
@@ -34,10 +30,10 @@ function EmitLocation({ auth, patrol }: EmitLocationProps) {
       watchPosition = navigator.geolocation.watchPosition(
         ({ coords }) => {
           axios.put(route("patrol.location"), {
-            location: JSON.stringify({
+            location: {
               lat: coords.latitude,
               lng: coords.longitude,
-            }),
+            },
           });
         },
         (e) => {

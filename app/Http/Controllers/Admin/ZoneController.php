@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreZoneRequest;
-use App\Http\Requests\UpdateZoneRequest;
+use App\Http\Requests\Admin\StoreZoneRequest;
+use App\Http\Requests\Admin\UpdateZoneRequest;
 use App\Models\Zone;
 use App\Utils\Geometry;
 use Inertia\Inertia;

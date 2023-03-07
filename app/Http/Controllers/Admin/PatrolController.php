@@ -4,23 +4,26 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Patrol;
-use App\Http\Requests\StorePatrolRequest;
-use App\Http\Requests\UpdatePatrolRequest;
+use App\Http\Requests\Admin\StorePatrolRequest;
+use App\Http\Requests\Admin\UpdatePatrolRequest;
 use App\Models\Car;
 use App\Models\User;
 use App\Models\Zone;
 use App\Utils\Geometry;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\Request;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class PatrolController extends Controller
 {
   /**
    * Display a listing of the resource.
+   *
+   * @return \Inertia\Response
    */
-  public function index()
+  public function index(): Response
   {
     $now = Carbon::now();
     return Inertia::render('Admin/Patrols/Index', [
@@ -36,8 +39,10 @@ class PatrolController extends Controller
 
   /**
    * Show the form for creating a new resource.
+   *
+   * @return \Inertia\Response
    */
-  public function create()
+  public function create(): Response
   {
     $drivers = User::whereIn('role', ['Police', 'Admin'])->get();
     $cars = Car::all();
@@ -52,8 +57,11 @@ class PatrolController extends Controller
 
   /**
    * Store a newly created resource in storage.
+   *
+   * @param \App\Http\Requests\Admin\StorePatrolRequest $request
+   * @return \Illuminate\Http\RedirectResponse
    */
-  public function store(StorePatrolRequest $request)
+  public function store(StorePatrolRequest $request): RedirectResponse
   {
     $patrol = new Patrol();
     $patrol->start_at = $request->start_at;
@@ -70,8 +78,11 @@ class PatrolController extends Controller
 
   /**
    * Display the specified resource.
+   *
+   * @param \App\Models\Patrol $patrol
+   * @return \Inertia\Response
    */
-  public function show(Patrol $patrol)
+  public function show(Patrol $patrol): Response
   {
     return Inertia::render('Admin/Patrols/Show', [
       'patrol' => $patrol->with('user', 'car', 'zone')
@@ -80,8 +91,11 @@ class PatrolController extends Controller
 
   /**
    * Show the form for editing the specified resource.
+   *
+   * @param \App\Models\Patrol $patrol
+   * @return \Inertia\Response
    */
-  public function edit(Patrol $patrol)
+  public function edit(Patrol $patrol): Response
   {
     $drivers = User::whereIn('role', ['Police', 'Admin']);
     $cars = Car::all();
@@ -97,8 +111,12 @@ class PatrolController extends Controller
 
   /**
    * Update the specified resource in storage.
+   *
+   * @param \App\Http\Requests\Admin\UpdatePatrolRequest $request
+   * @param \App\Models\Patrol $patrol
+   * @return \Illuminate\Http\RedirectResponse
    */
-  public function update(UpdatePatrolRequest $request, Patrol $patrol)
+  public function update(UpdatePatrolRequest $request, Patrol $patrol): RedirectResponse
   {
     $patrol->start_at = $request->start_at;
     $patrol->end_at = $request->end_at;
@@ -114,8 +132,11 @@ class PatrolController extends Controller
 
   /**
    * Remove the specified resource from storage.
+   *
+   * @param \App\Models\Patrol $patrol
+   * @return \Illuminate\Http\RedirectResponse
    */
-  public function destroy(Patrol $patrol)
+  public function destroy(Patrol $patrol): RedirectResponse
   {
     $patrol->delete();
 

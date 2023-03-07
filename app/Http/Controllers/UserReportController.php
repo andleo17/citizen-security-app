@@ -6,13 +6,15 @@ use App\Events\NewReport;
 use App\Http\Requests\StoreReportRequest;
 use App\Models\Report;
 use App\Utils\Geometry;
-use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class UserReportController extends Controller
 {
-  public function index()
+  public function index(): Response
   {
     $reports = Auth::user()->reports
       ->load('reportSubCategory')
@@ -24,11 +26,11 @@ class UserReportController extends Controller
     ]);
   }
 
-  public function store(StoreReportRequest $request)
+  public function store(StoreReportRequest $request): RedirectResponse
   {
     $report = new Report();
 
-    $report->location = Geometry::toPoint($request->location);
+    $report->location = Geometry::toPoint(json_encode($request->location));
     $report->description = $request->description;
     $report->emergency = $request->emergency;
     $report->user_id = $request->user()->id;
@@ -46,10 +48,10 @@ class UserReportController extends Controller
 
     event(new NewReport($report->load('user')));
 
-    return redirect()->route('reports.index');
+    return Redirect::route('reports.index');
   }
 
-  public function attend(Report $report)
+  public function attend(Report $report): void
   {
     $report->state = true;
     $report->save();

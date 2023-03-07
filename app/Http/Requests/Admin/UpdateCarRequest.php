@@ -1,17 +1,20 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Admin;
 
+use App\Models\Car;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
-class StoreReportCategoryRequest extends FormRequest
+class UpdateCarRequest extends FormRequest
 {
   /**
    * Determine if the user is authorized to make this request.
    */
   public function authorize(): bool
   {
-    return true;
+    return Auth::user()->isAdmin();
   }
 
   /**
@@ -22,8 +25,7 @@ class StoreReportCategoryRequest extends FormRequest
   public function rules(): array
   {
     return [
-      'name' => 'string|required',
-      'description' => 'string|nullable'
+      'licensePlate' => ['string', Rule::unique(Car::class)->ignore($this->car)],
     ];
   }
 }

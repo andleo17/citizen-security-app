@@ -1,17 +1,18 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
-class UpdateReportRequest extends FormRequest
+class UpdateReportCategoryRequest extends FormRequest
 {
   /**
    * Determine if the user is authorized to make this request.
    */
   public function authorize(): bool
   {
-    return true;
+    return Auth::user()->isAdmin();
   }
 
   /**
@@ -22,7 +23,11 @@ class UpdateReportRequest extends FormRequest
   public function rules(): array
   {
     return [
-      //
+      'name' => 'string|required',
+      'description' => 'string|nullable',
+      'subCategories' => 'array',
+      'subCategories.*.name' => 'string|required',
+      'subCategories.*.description' => 'string|nullable',
     ];
   }
 }

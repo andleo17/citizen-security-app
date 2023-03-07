@@ -11,6 +11,7 @@ import { FormEvent } from "react";
 import SelectInput from "@/Components/Common/Forms/SelectInput";
 import Area from "@/Components/Maps/Area";
 import dayjs from "dayjs";
+import ErrorMessage from "@/Components/Common/Forms/ErrorMessage";
 
 interface PatrolFormProps {
   patrol?: Patrol;
@@ -159,6 +160,7 @@ function PatrolForm({ patrol, zones, drivers, cars }: PatrolFormProps) {
           <span className="text-sm block dark:text-gray-300 text-gray-600">
             Marca en el mapa la ruta que seguirá el camión.
           </span>
+          {errors.route && <ErrorMessage message={errors.route} />}
         </div>
         <MapWrapper>
           <Map

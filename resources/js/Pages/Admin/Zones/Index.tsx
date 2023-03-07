@@ -4,7 +4,6 @@ import { Head, Link } from "@inertiajs/react";
 import { Table } from "flowbite-react";
 
 function Index({ auth, zones }: any) {
-  console.log(zones);
   return (
     <AdminLayout auth={auth}>
       <Head title="Lista de zonas" />

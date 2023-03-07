@@ -1,17 +1,18 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
-class UpdateCarRequest extends FormRequest
+class UpdateZoneRequest extends FormRequest
 {
   /**
    * Determine if the user is authorized to make this request.
    */
   public function authorize(): bool
   {
-    return true;
+    return Auth::user()->isAdmin();
   }
 
   /**
@@ -22,7 +23,10 @@ class UpdateCarRequest extends FormRequest
   public function rules(): array
   {
     return [
-      //
+      'name' => 'string|required',
+      'area' => 'array|required',
+      'area.*.lat' => 'required|numeric',
+      'area.*.lng' => 'required|numeric',
     ];
   }
 }

@@ -14,7 +14,6 @@ interface IndexProps {
 
 function Index({ auth, patrolsInDay }: IndexProps) {
   const [patrols, setPatrols] = useState(patrolsInDay);
-  console.log(patrols);
 
   return (
     <AdminLayout auth={auth}>

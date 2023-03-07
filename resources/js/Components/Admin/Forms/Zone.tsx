@@ -8,6 +8,7 @@ import { polygonToJson } from "@/Utils/Geometry";
 import { useForm } from "@inertiajs/react";
 import { Button, Label } from "flowbite-react";
 import { FormEvent, FormEventHandler } from "react";
+import ErrorMessage from "@/Components/Common/Forms/ErrorMessage";
 
 interface ZoneFormProps {
   zone?: Zone;
@@ -85,6 +86,7 @@ function ZoneForm({ zone }: ZoneFormProps) {
           <span className="text-sm block dark:text-gray-300 text-gray-600">
             Marca en el mapa los puntos que generan el área
           </span>
+          {errors.area && <ErrorMessage message={errors.area} />}
         </div>
         <MapWrapper>
           <Map
@@ -119,3 +121,4 @@ function ZoneForm({ zone }: ZoneFormProps) {
 }
 
 export default ZoneForm;
+

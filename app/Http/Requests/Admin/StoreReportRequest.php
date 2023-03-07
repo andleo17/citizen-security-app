@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Auth;
 
 class StoreReportRequest extends FormRequest
 {
@@ -12,7 +11,7 @@ class StoreReportRequest extends FormRequest
    */
   public function authorize(): bool
   {
-    return Auth::check();
+    return true;
   }
 
   /**
@@ -24,12 +23,8 @@ class StoreReportRequest extends FormRequest
   {
     return [
       'description' => 'string|required',
-      'location' => 'required',
-      'location.lat' => 'required|numeric',
-      'location.lng' => 'required|numeric',
       'photos' => 'nullable',
-      'photos.*' => 'image',
-      'emergency' => 'required|boolean'
+      'photos.*' => 'image'
     ];
   }
 }
