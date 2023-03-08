@@ -1,6 +1,6 @@
 import type { Patrol } from "vendor";
 
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useCallback, useEffect, useState } from "react";
 import Marker from "../Maps/Marker";
 import truckIcon from "@icons/truck-icon.svg";
 import { renderToStaticMarkup } from "react-dom/server";
@@ -10,6 +10,34 @@ import Polyline from "../Maps/Polyline";
 interface CarLocationProps {
   map?: google.maps.Map;
   initialPatrols: Patrol[];
+}
+
+function useCarLocation(initialPatrols: Patrol[]) {
+  const [patrols, setPatrols] = useState(initialPatrols);
+
+  useEffect(() => {
+    const channel = Echo.channel("patrols");
+
+    channel.listen(".patrol.location", ({ patrol }: { patrol: Patrol }) => {
+      setPatrols((prev) => {
+        const currentPatrol = prev.findIndex((t) => t.id === patrol.id);
+
+        if (currentPatrol === -1) return [...prev, patrol];
+
+        if (patrol.finished) return prev.filter((t) => t.id !== patrol.id);
+
+        prev[currentPatrol].location = patrol.location;
+        return prev;
+      });
+    });
+
+    return () => {
+      channel.stopListening(".patrol.location");
+      Echo.leaveChannel("patrols");
+    };
+  }, []);
+
+  return patrols;
 }
 
 function PatrolInfo({ patrol }: { patrol: Patrol }) {
@@ -22,32 +50,7 @@ function PatrolInfo({ patrol }: { patrol: Patrol }) {
 }
 
 function CarLocation({ map, initialPatrols }: CarLocationProps) {
-  const [patrols, setPatrols] = useState(initialPatrols);
-
-  useEffect(() => {
-    Echo.channel("patrols").listen(
-      ".patrol.location",
-      function ({ patrol }: { patrol: Patrol }) {
-        const newPatrols = [...patrols];
-        const currentPatrol = newPatrols.findIndex((t) => t.id === patrol.id);
-        if (currentPatrol !== -1) {
-          if (patrol.finished) {
-            setPatrols(newPatrols.filter((t) => t.id !== patrol.id));
-          } else {
-            newPatrols[currentPatrol].location = patrol.location;
-            setPatrols(newPatrols);
-          }
-        } else {
-          newPatrols.push(patrol);
-          setPatrols(newPatrols);
-        }
-      }
-    );
-
-    return () => {
-      Echo.leaveChannel("patrols");
-    };
-  }, []);
+  const patrols = useCarLocation(initialPatrols);
 
   return (
     <>
