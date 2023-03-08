@@ -1,25 +1,31 @@
 import { useEffect, useState } from "react";
 
 function useSound(url: string) {
-  const [audio, setAudio] = useState(new Audio(url));
+  const [audio, setAudio] = useState<HTMLAudioElement>();
   const [isPlaying, setPlaying] = useState(false);
   const [windowFocused, setWindowFocused] = useState(false);
 
   function play() {
     if (!windowFocused) return;
+    if (!audio) return;
 
     audio.muted = false;
     audio.play();
   }
 
   function pause() {
+    if (!audio) return;
+
     audio.muted = false;
     audio.pause();
   }
 
   useEffect(() => {
-    audio.loop = true;
-    audio.muted = true;
+    const newAudio = new Audio(url);
+    newAudio.loop = true;
+    newAudio.muted = true;
+
+    setAudio(newAudio);
 
     function handleFocusIn() {
       setWindowFocused(true);
