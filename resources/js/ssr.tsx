@@ -27,5 +27,4 @@ createServer((page: Page<any>) => {
       return <App {...props} />;
     },
   });
-});
-
+}, Number(process.env.VITE_INERTIA_SSR_PORT) || 13714);
