@@ -16,35 +16,48 @@ interface EmitLocationProps {
   patrol?: Patrol;
 }
 
+function formatDistance(distance?: number) {
+  if (distance < 1000) {
+    return distance.toFixed(2) + " m";
+  }
+
+  return (distance / 1000).toFixed(2) + " km";
+}
+
 function EmitLocation({ auth, patrol }: EmitLocationProps) {
   const [patrolStarted, setPatrolStart] = useState(patrol?.started);
   const { progress, ...longPress } = useLongPress(
     () => router.delete(route("patrol.finish")),
     3000
   );
+  const [distance, setDistance] = useState(patrol?.distance || 0);
 
   useEffect(() => {
     let watchPosition: number;
 
     if (patrolStarted) {
-      watchPosition = navigator.geolocation.watchPosition(
-        ({ coords }) => {
-          axios.put(route("patrol.location"), {
-            location: {
-              lat: coords.latitude,
-              lng: coords.longitude,
-            },
-          });
-        },
-        (e) => {
-          console.error(e);
-        },
-        { timeout: 3000 }
-      );
+      watchPosition = window.setInterval(() => {
+        navigator.geolocation.getCurrentPosition(
+          ({ coords }) => {
+            axios
+              .put(route("patrol.location"), {
+                location: {
+                  lat: coords.latitude,
+                  lng: coords.longitude,
+                },
+              })
+              .then(({ data }) => {
+                setDistance(data.distance);
+              });
+          },
+          (e) => console.error(e),
+          { enableHighAccuracy: true }
+        );
+      }, 3000);
     }
 
     return () => {
-      if (watchPosition) navigator.geolocation.clearWatch(watchPosition);
+      if (watchPosition) window.clearInterval(watchPosition);
     };
   }, [patrolStarted]);
 
@@ -84,7 +97,11 @@ function EmitLocation({ auth, patrol }: EmitLocationProps) {
               <Progress progress={progress} size="md" color="dark" />
             </div>
           )}
-          <p>Estamos enviando tu ubicacíon</p>
+          <p className="mt-3">Estamos enviando tu ubicacíon</p>
+          <div className="mt-6 text-center">
+            <p className="font-bold text-md">Distancia recorrida</p>
+            <span className="text-4xl">{formatDistance(distance)}</span>
+          </div>
         </div>
       </div>
       <footer className="absolute bottom-0 left-0 right-0 bg-red-900 text-white p-3 text-center md:text-base sm:text-sm text-xs">

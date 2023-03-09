@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Events\CarLocationChange;
 use App\Http\Requests\UpdatePositionRequest;
+use App\Models\Patrol;
 use App\Utils\Geometry;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -42,12 +43,22 @@ class PatrolScheduleController extends Controller
   public function updatePosition(UpdatePositionRequest $request): JsonResponse
   {
     $currentPatrol = Auth::user()->currentPatrol();
-    $currentPatrol->location = Geometry::toPoint(json_encode($request->location));
+
+    $newPosition = Geometry::toPoint(json_encode($request->location));
+    $oldPosition = $currentPatrol->location;
+
+    $currentPatrol->location = $newPosition;
+
+    if ($oldPosition) {
+      $distance = Geometry::getDistance($oldPosition, $newPosition);
+      $currentPatrol->distance = $currentPatrol->distance + $distance;
+    }
+
     $currentPatrol->save();
 
     event(new CarLocationChange($currentPatrol->load('car')));
 
-    return HttpResponse::json(['message' => 'Patrol location updated']);
+    return HttpResponse::json(['distance' => $currentPatrol->distance]);
   }
 
   public function finish(): RedirectResponse

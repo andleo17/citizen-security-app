@@ -12,6 +12,9 @@ use MatanYadaev\EloquentSpatial\Objects\LineString;
 use MatanYadaev\EloquentSpatial\Objects\Point;
 use MatanYadaev\EloquentSpatial\Traits\HasSpatial;
 
+/**
+ * @method static \MatanYadaev\EloquentSpatial\SpatialBuilder query()
+ */
 class Patrol extends Model
 {
   use HasFactory;

@@ -73,7 +73,7 @@ class User extends Authenticatable
     return $this->hasMany(Patrol::class);
   }
 
-  public function currentPatrol()
+  public function currentPatrol(): ?Patrol
   {
     $tolerance = 20;
     $now = Carbon::now();
