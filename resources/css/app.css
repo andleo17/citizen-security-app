@@ -12,6 +12,11 @@
     -webkit-appearance: none;
     margin: 0;
   }
+
+  input[type="date"]::-webkit-calendar-picker-indicator {
+    height: 22px;
+    width: 22px;
+  }
 }
 
 .pullee {
@@ -40,5 +45,4 @@
 .pullee::-webkit-slider-runnable-track {
   padding: 0.5em;
   border-radius: 1em;
-  background-color: #DDE0E3;
 }

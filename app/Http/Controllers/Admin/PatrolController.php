@@ -10,9 +10,12 @@ use App\Models\Car;
 use App\Models\User;
 use App\Models\Zone;
 use App\Utils\Geometry;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Response as HttpResponse;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -25,15 +28,8 @@ class PatrolController extends Controller
    */
   public function index(): Response
   {
-    $now = Carbon::now();
     return Inertia::render('Admin/Patrols/Index', [
-      'patrolsInDay' => Patrol::whereDate('start_at', $now->toDate())
-        ->orWhereDate('end_at', $now->toDate())
-        ->with('user', 'zone', 'car')
-        ->orderBy('start_at')
-        ->get()
-        ->sortByDesc('isCurrent')
-        ->values()
+      'patrolsInDay' => Patrol::getByDate(Carbon::now()->toDate()),
     ]);
   }
 
@@ -141,5 +137,12 @@ class PatrolController extends Controller
     $patrol->delete();
 
     return Redirect::route('admin.patrols.index');
+  }
+
+  public function getPatrolsByDate(Request $request): JsonResponse
+  {
+    $date = Carbon::parse($request->date)->toDate();
+
+    return HttpResponse::json(Patrol::getByDate($date));
   }
 }
