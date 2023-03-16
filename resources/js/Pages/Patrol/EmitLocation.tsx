@@ -27,27 +27,25 @@ function EmitLocation({ userFullname, patrol }: EmitLocationProps) {
   const [distance, setDistance] = useState(patrol?.distance || 0);
 
   useEffect(() => {
-    const watchPosition = window.setInterval(() => {
-      navigator.geolocation.getCurrentPosition(
-        ({ coords }) => {
-          axios
-            .put(route("patrol.location"), {
-              location: {
-                lat: coords.latitude,
-                lng: coords.longitude,
-              },
-            })
-            .then(({ data }) => {
-              setDistance(data.distance);
-            });
-        },
-        (e) => console.error(e),
-        { enableHighAccuracy: true }
-      );
-    }, 3000);
+    const watchPosition = navigator.geolocation.watchPosition(
+      ({ coords }) => {
+        axios
+          .put(route("patrol.location"), {
+            location: {
+              lat: coords.latitude,
+              lng: coords.longitude,
+            },
+          })
+          .then(({ data }) => {
+            setDistance(data.distance);
+          });
+      },
+      (e) => console.error(e),
+      { enableHighAccuracy: true }
+    );
 
     return () => {
-      if (watchPosition) window.clearInterval(watchPosition);
+      if (watchPosition) navigator.geolocation.clearWatch(watchPosition);
     };
   }, []);
 
