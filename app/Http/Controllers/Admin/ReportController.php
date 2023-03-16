@@ -25,7 +25,7 @@ class ReportController extends Controller
       ->orderBy('created_at', 'desc')
       ->with('user', 'reportSubCategory')
       ->withCasts(['created_at' => TimeAgo::class])
-      ->get();
+      ->paginate(10);
 
     return Inertia::render('Admin/Reports/Index', ['reports' => $reports]);
   }
