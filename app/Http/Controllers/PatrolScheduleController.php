@@ -25,7 +25,7 @@ class PatrolScheduleController extends Controller
   public function index(): Response
   {
     $currentPatrol = Auth::user()->currentPatrol();
-    return Inertia::render('Patrol/EmitLocation', [
+    return Inertia::render('Patrol/Index', [
       'patrol' => $currentPatrol ? $currentPatrol->load('car') : null,
     ]);
   }
