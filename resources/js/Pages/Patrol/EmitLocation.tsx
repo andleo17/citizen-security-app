@@ -29,7 +29,7 @@ function EmitLocation({ userFullname, patrol }: EmitLocationProps) {
   useEffect(() => {
     const watchPosition = navigator.geolocation.watchPosition(
       ({ coords }) => {
-        if (coords.speed >= 2.777) {
+        if (coords.speed >= 1.39) {
           axios
             .put(route("patrol.location"), {
               location: {
