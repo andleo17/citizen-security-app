@@ -1,13 +1,13 @@
-import type { Car, User } from "vendor";
+import type { Car, Paginable, User } from "vendor";
 
 import NavLink from "@/Components/Common/NavLink";
 import AdminLayout from "@/Layouts/AdminLayout";
 import { Head, Link } from "@inertiajs/react";
-import { Table } from "flowbite-react";
+import Table from "@/Components/Common/Table";
 
 interface IndexProps {
   auth: { user: User };
-  cars: Car[];
+  cars: Paginable<Car>;
 }
 
 function Index({ auth, cars }: IndexProps) {
@@ -20,50 +20,51 @@ function Index({ auth, cars }: IndexProps) {
           Agregar
         </NavLink>
       </div>
-      {cars.length > 0 ? (
-        <Table hoverable>
-          <Table.Head>
-            <Table.HeadCell>ID</Table.HeadCell>
-            <Table.HeadCell>Placa</Table.HeadCell>
-            <Table.HeadCell>
-              <span className="sr-only">Editar</span>
-            </Table.HeadCell>
-            <Table.HeadCell>
-              <span className="sr-only">Eliminar</span>
-            </Table.HeadCell>
-          </Table.Head>
-          <Table.Body className="divide-y">
-            {cars.map((z) => (
-              <Table.Row
-                key={z.id}
-                className="bg-white dark:border-gray-700 dark:bg-gray-800"
-              >
-                <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                  {z.id}
-                </Table.Cell>
-                <Table.Cell>{z.licensePlate}</Table.Cell>
-                <Table.Cell>
-                  <Link
-                    href={route("admin.cars.edit", z.id)}
-                    className="font-medium text-blue-600 hover:underline dark:text-blue-500"
-                  >
-                    Editar
-                  </Link>
-                </Table.Cell>
-                <Table.Cell>
-                  <Link
-                    href={route("admin.cars.destroy", z.id)}
-                    className="font-medium text-red-600 hover:underline dark:text-red-500"
-                    method={"delete"}
-                    as="button"
-                  >
-                    Eliminar
-                  </Link>
-                </Table.Cell>
-              </Table.Row>
-            ))}
-          </Table.Body>
-        </Table>
+      {cars.data.length > 0 ? (
+        <>
+          <Table>
+            <Table.Head>
+              <Table.Header>ID</Table.Header>
+              <Table.Header>Placa</Table.Header>
+              <Table.Header>
+                <span className="sr-only">Editar</span>
+              </Table.Header>
+              <Table.Header>
+                <span className="sr-only">Eliminar</span>
+              </Table.Header>
+            </Table.Head>
+            <Table.Body>
+              {cars.data.map((z) => (
+                <Table.Row
+                  key={z.id}
+                  className="bg-white dark:border-gray-700 dark:bg-gray-800"
+                >
+                  <Table.Cell>{z.id}</Table.Cell>
+                  <Table.Cell>{z.licensePlate}</Table.Cell>
+                  <Table.Cell>
+                    <Link
+                      href={route("admin.cars.edit", z.id)}
+                      className="font-medium text-blue-600 hover:underline dark:text-blue-500"
+                    >
+                      Editar
+                    </Link>
+                  </Table.Cell>
+                  <Table.Cell>
+                    <Link
+                      href={route("admin.cars.destroy", z.id)}
+                      className="font-medium text-red-600 hover:underline dark:text-red-500"
+                      method={"delete"}
+                      as="button"
+                    >
+                      Eliminar
+                    </Link>
+                  </Table.Cell>
+                </Table.Row>
+              ))}
+            </Table.Body>
+          </Table>
+          <Table.Pagination info={cars} />
+        </>
       ) : (
         <div>
           <p>No se encuentran datos</p>

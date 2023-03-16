@@ -21,7 +21,7 @@ class CarController extends Controller
   public function index(): Response
   {
     return Inertia::render('Admin/Cars/Index', [
-      'cars' => Car::all(),
+      'cars' => Car::paginate(10),
     ]);
   }
 
