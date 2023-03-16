@@ -1,13 +1,13 @@
-import type { User } from "vendor";
+import type { Paginable, User } from "vendor";
 
 import NavLink from "@/Components/Common/NavLink";
 import AdminLayout from "@/Layouts/AdminLayout";
 import { Head, Link } from "@inertiajs/react";
-import { Table } from "flowbite-react";
+import Table from "@/Components/Common/Table";
 
 interface IndexProps {
   auth: { user: User };
-  users: User[];
+  users: Paginable<User>;
 }
 
 const UserRole: Record<string, string> = {
@@ -26,56 +26,59 @@ function Index({ auth, users }: IndexProps) {
           Agregar
         </NavLink>
       </div>
-      {users.length > 0 ? (
-        <Table hoverable>
-          <Table.Head>
-            <Table.HeadCell>ID</Table.HeadCell>
-            <Table.HeadCell>DNI</Table.HeadCell>
-            <Table.HeadCell>Nombre completo</Table.HeadCell>
-            <Table.HeadCell>Rol</Table.HeadCell>
-            <Table.HeadCell>Estado</Table.HeadCell>
-            <Table.HeadCell>
-              <span className="sr-only">Editar</span>
-            </Table.HeadCell>
-            <Table.HeadCell>
-              <span className="sr-only">Eliminar</span>
-            </Table.HeadCell>
-          </Table.Head>
-          <Table.Body className="divide-y">
-            {users.map((u) => (
-              <Table.Row
-                key={u.id}
-                className="bg-white dark:border-gray-700 dark:bg-gray-800"
-              >
-                <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                  {u.id}
-                </Table.Cell>
-                <Table.Cell>{u.dni}</Table.Cell>
-                <Table.Cell>{u.fullname}</Table.Cell>
-                <Table.Cell>{UserRole[u.role]}</Table.Cell>
-                <Table.Cell>{u.deleted_at ? "Inactivo" : "Activo"}</Table.Cell>
-                <Table.Cell>
-                  <Link
-                    href={route("admin.users.edit", u.id)}
-                    className="font-medium text-blue-600 hover:underline dark:text-blue-500"
-                  >
-                    Editar
-                  </Link>
-                </Table.Cell>
-                <Table.Cell>
-                  <Link
-                    href={route("admin.users.destroy", u.id)}
-                    className="font-medium text-red-600 hover:underline dark:text-red-500"
-                    method={"delete"}
-                    as="button"
-                  >
-                    Eliminar
-                  </Link>
-                </Table.Cell>
-              </Table.Row>
-            ))}
-          </Table.Body>
-        </Table>
+      {users.data.length > 0 ? (
+        <>
+          <Table>
+            <Table.Head>
+              <Table.Header>ID</Table.Header>
+              <Table.Header>DNI</Table.Header>
+              <Table.Header>Nombre completo</Table.Header>
+              <Table.Header>Rol</Table.Header>
+              <Table.Header>Estado</Table.Header>
+              <Table.Header>
+                <span className="sr-only">Editar</span>
+              </Table.Header>
+              <Table.Header>
+                <span className="sr-only">Eliminar</span>
+              </Table.Header>
+            </Table.Head>
+            <Table.Body>
+              {users.data.map((u) => (
+                <Table.Row
+                  key={u.id}
+                  className="bg-white dark:border-gray-700 dark:bg-gray-800"
+                >
+                  <Table.Cell>{u.id}</Table.Cell>
+                  <Table.Cell>{u.dni}</Table.Cell>
+                  <Table.Cell>{u.fullname}</Table.Cell>
+                  <Table.Cell>{UserRole[u.role]}</Table.Cell>
+                  <Table.Cell>
+                    {u.deleted_at ? "Inactivo" : "Activo"}
+                  </Table.Cell>
+                  <Table.Cell>
+                    <Link
+                      href={route("admin.users.edit", u.id)}
+                      className="font-medium text-blue-600 hover:underline dark:text-blue-500"
+                    >
+                      Editar
+                    </Link>
+                  </Table.Cell>
+                  <Table.Cell>
+                    <Link
+                      href={route("admin.users.destroy", u.id)}
+                      className="font-medium text-red-600 hover:underline dark:text-red-500"
+                      method={"delete"}
+                      as="button"
+                    >
+                      Eliminar
+                    </Link>
+                  </Table.Cell>
+                </Table.Row>
+              ))}
+            </Table.Body>
+          </Table>
+          <Table.Pagination info={users} />
+        </>
       ) : (
         <div>
           <p>No se encuentran datos</p>

@@ -22,7 +22,7 @@ class UserController extends Controller
   public function index(): Response
   {
     return Inertia::render('Admin/Users/Index', [
-      'users' => User::all()
+      'users' => User::paginate(10)
     ]);
   }
 
