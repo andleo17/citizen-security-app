@@ -11,6 +11,28 @@ declare global {
   var Echo: Echo;
 }
 
+interface PaginationLink {
+  url: string;
+  label: string;
+  active: boolean;
+}
+
+interface Paginable<T = any> {
+  current_page: number;
+  data: T[];
+  first_page_url: string;
+  from: number;
+  last_page: number;
+  last_page_url: string;
+  links: PaginationLink[];
+  next_page_url: string;
+  path: string;
+  per_page: number;
+  prev_page_url: string;
+  to: number;
+  total: number;
+}
+
 type Polygon = {
   type: "Polygon";
   coordinates: number[][];
@@ -127,4 +149,3 @@ type Patrol = {
   car?: Car;
   zone?: Zone;
 };
-
