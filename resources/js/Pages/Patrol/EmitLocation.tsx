@@ -25,10 +25,12 @@ function EmitLocation({ userFullname, patrol }: EmitLocationProps) {
     3000
   );
   const [distance, setDistance] = useState(patrol?.distance || 0);
+  const [coordinates, setCoordinates] = useState<GeolocationCoordinates>();
 
   useEffect(() => {
     const watchPosition = navigator.geolocation.watchPosition(
       ({ coords }) => {
+        setCoordinates(coords);
         axios
           .put(route("patrol.location"), {
             location: {
@@ -66,6 +68,10 @@ function EmitLocation({ userFullname, patrol }: EmitLocationProps) {
             </div>
           )}
           <p className="mt-3">Estamos enviando tu ubicacíon</p>
+          <p>Posición:</p>
+          <b>Latitud: {coordinates?.latitude}</b>
+          <br />
+          <b>Longitud: {coordinates?.longitude}</b>
           <div className="mt-6 text-center">
             <p className="font-bold text-md">Distancia recorrida</p>
             <span className="text-4xl">{formatDistance(distance)}</span>
