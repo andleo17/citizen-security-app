@@ -17,13 +17,14 @@ return new class extends Migration
       $table->float('distance')->default(0);
       $table->timestamp('start_at');
       $table->timestamp('end_at');
-      $table->lineString('route')->nullable();
+      $table->lineString('route_path')->nullable();
       $table->point('location')->nullable();
       $table->timestamp('started_at')->nullable();
       $table->timestamp('finished_at')->nullable();
       $table->foreignId('user_id')->constrained();
       $table->foreignId('car_id')->constrained();
       $table->foreignId('zone_id')->constrained();
+      $table->foreignId('route_id')->nullable()->constrained();
       $table->timestamps();
     });
   }

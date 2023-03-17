@@ -67,7 +67,7 @@ function CarLocation({ map, initialPatrols }: CarLocationProps) {
             map={map}
           />
           <Polyline
-            path={lineStringtoJson(p.route)}
+            path={lineStringtoJson(p.route_path)}
             map={map}
             strokeColor={"#add8ff"}
             strokeWeight={6}

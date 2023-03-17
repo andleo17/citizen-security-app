@@ -1,13 +1,12 @@
 import type { Car, Patrol, User, Zone } from "vendor";
 
 import TextInput from "@/Components/Common/Forms/TextInput";
-import DrawManager, { OverlayType } from "@/Components/Maps/DrawManager";
 import Map, { MapWrapper } from "@/Components/Maps/Map";
 import Polyline from "@/Components/Maps/Polyline";
 import { lineStringtoJson, polygonToJson } from "@/Utils/Geometry";
 import { useForm } from "@inertiajs/react";
 import { Button, Label } from "flowbite-react";
-import { FormEvent } from "react";
+import { FormEvent, useState } from "react";
 import SelectInput from "@/Components/Common/Forms/SelectInput";
 import Area from "@/Components/Maps/Area";
 import dayjs from "dayjs";
@@ -26,10 +25,11 @@ function usePatrolForm(patrol?: Patrol) {
   const { data, setData, put, post, errors, processing, transform } = useForm({
     start_at: patrol?.start_at || dayjs().format(formatTemplate),
     end_at: patrol?.end_at || dayjs().add(1, "hours").format(formatTemplate),
-    route: lineStringtoJson(patrol?.route) || [],
+    route_path: lineStringtoJson(patrol?.route_path) || [],
     user_id: patrol?.user_id || -1,
     car_id: patrol?.car_id || -1,
     zone_id: patrol?.zone_id || -1,
+    route_id: patrol?.route_id || -1,
   });
 
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
@@ -39,6 +39,7 @@ function usePatrolForm(patrol?: Patrol) {
       user_id: d.user_id !== -1 ? d.user_id : null,
       car_id: d.car_id !== -1 ? d.car_id : null,
       zone_id: d.zone_id !== -1 ? d.zone_id : null,
+      route_id: d.route_id !== -1 ? d.route_id : null,
     }));
     if (patrol) {
       put(route("admin.patrols.update", { id: patrol.id }));
@@ -53,18 +54,7 @@ function usePatrolForm(patrol?: Patrol) {
       .getArray()
       .map((p) => ({ lat: p.lat(), lng: p.lng() }));
 
-    setData("route", polylinePoints);
-  }
-
-  function handlePolygonComplete(e: any) {
-    if (e.type === "polyline") {
-      const path = e.overlay
-        .getPath()
-        .getArray()
-        .map((p: any) => ({ lat: p.lat(), lng: p.lng() }));
-      setData("route", path);
-      e.overlay.setMap(null);
-    }
+    setData("route_path", polylinePoints);
   }
 
   return {
@@ -74,20 +64,13 @@ function usePatrolForm(patrol?: Patrol) {
     errors,
     handleSubmit,
     setPolylineData,
-    handlePolygonComplete,
   };
 }
 
 function PatrolForm({ patrol, zones, drivers, cars }: PatrolFormProps) {
-  const {
-    data,
-    setData,
-    processing,
-    errors,
-    handleSubmit,
-    setPolylineData,
-    handlePolygonComplete,
-  } = usePatrolForm(patrol);
+  const { data, setData, processing, errors, handleSubmit, setPolylineData } =
+    usePatrolForm(patrol);
+  const [selectedZone, setSelectedZone] = useState<Zone>(patrol?.zone);
 
   return (
     <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
@@ -143,7 +126,10 @@ function PatrolForm({ patrol, zones, drivers, cars }: PatrolFormProps) {
         id="zone_id"
         labelText="Zona"
         value={data.zone_id}
-        onChange={(e) => setData("zone_id", Number(e.target.value))}
+        onChange={(e) => {
+          setData("zone_id", Number(e.target.value));
+          setSelectedZone(zones.find((z) => z.id === Number(e.target.value)));
+        }}
         placeholder="Seleccione una zona"
         errors={errors.zone_id}
         required
@@ -154,13 +140,35 @@ function PatrolForm({ patrol, zones, drivers, cars }: PatrolFormProps) {
           </SelectInput.Item>
         ))}
       </SelectInput>
+      <SelectInput
+        id="route_id"
+        labelText="Ruta"
+        value={data.route_id}
+        onChange={(e) => {
+          setData("route_id", Number(e.target.value));
+          setData(
+            "route_path",
+            lineStringtoJson(
+              selectedZone.routes.find((r) => r.id === Number(e.target.value))
+                .path
+            )
+          );
+        }}
+        placeholder="Seleccione una ruta"
+      >
+        {selectedZone?.routes.map((r) => (
+          <SelectInput.Item value={r.id} key={r.id}>
+            {r.name}
+          </SelectInput.Item>
+        ))}
+      </SelectInput>
       <div>
         <div className="mb-2 block">
           <Label value="Ruta" />
           <span className="text-sm block dark:text-gray-300 text-gray-600">
             Marca en el mapa la ruta que seguirá el camión.
           </span>
-          {errors.route && <ErrorMessage message={errors.route} />}
+          {errors.route_path && <ErrorMessage message={errors.route_path} />}
         </div>
         <MapWrapper>
           <Map
@@ -170,18 +178,9 @@ function PatrolForm({ patrol, zones, drivers, cars }: PatrolFormProps) {
             mapTypeControl={false}
             className="h-[500px]"
           >
-            <Area
-              paths={polygonToJson(
-                zones.find((z) => z.id === data.zone_id)?.area
-              )}
-            />
-            <DrawManager
-              drawingControl={true}
-              eventHandler={handlePolygonComplete}
-              drawingControlOptions={{ drawingModes: [OverlayType.POLYLINE] }}
-            />
+            <Area paths={polygonToJson(selectedZone?.area)} />
             <Polyline
-              path={data.route}
+              path={data.route_path}
               strokeColor={"#add8ff"}
               strokeWeight={6}
               strokeOpacity={1}

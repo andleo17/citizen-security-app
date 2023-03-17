@@ -21,4 +21,9 @@ class Zone extends Model
   {
     return $this->hasMany(Patrol::class);
   }
+
+  public function routes(): HasMany
+  {
+    return $this->hasMany(Route::class);
+  }
 }

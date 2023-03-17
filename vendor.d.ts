@@ -116,6 +116,18 @@ type Zone = {
   created_at?: string;
   updated_at?: string;
   patrols?: Patrol[];
+  routes?: Route[];
+};
+
+type Route = {
+  id: number;
+  name: string;
+  path: LineString;
+  created_at?: string;
+  updated_at?: string;
+  zone_id: number;
+  zone?: Zone;
+  patrols?: Patrol[];
 };
 
 type Car = {
@@ -133,7 +145,7 @@ type Patrol = {
   distance: number;
   start_at: string;
   end_at: string;
-  route?: LineString;
+  route_path?: LineString;
   location?: Point;
   started_at?: string;
   finished_at?: string;
@@ -145,7 +157,9 @@ type Patrol = {
   user_id: number;
   car_id: number;
   zone_id: number;
+  route_id?: number;
   user?: User;
   car?: Car;
   zone?: Zone;
+  route?: Route;
 };

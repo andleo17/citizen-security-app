@@ -67,6 +67,11 @@ class Patrol extends Model
     return $this->belongsTo(Zone::class);
   }
 
+  public function route(): BelongsTo
+  {
+    return $this->belongsTo(Route::class);
+  }
+
   public static function getByDate(DateTime $date)
   {
     return Patrol::whereDate('start_at', $date)

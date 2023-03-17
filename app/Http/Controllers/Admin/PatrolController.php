@@ -42,7 +42,7 @@ class PatrolController extends Controller
   {
     $drivers = User::whereIn('role', ['Police', 'Admin'])->get();
     $cars = Car::all();
-    $zones = Zone::all();
+    $zones = Zone::with('routes')->get();
 
     return Inertia::render('Admin/Patrols/Create', [
       'drivers' => $drivers,
@@ -62,7 +62,7 @@ class PatrolController extends Controller
     $patrol = new Patrol();
     $patrol->start_at = $request->start_at;
     $patrol->end_at = $request->end_at;
-    $patrol->route = Geometry::toLineString($request->route);
+    $patrol->route_path = Geometry::toLineString($request->route_path);
     $patrol->user_id = $request->user_id;
     $patrol->car_id = $request->car_id;
     $patrol->zone_id = $request->zone_id;
@@ -116,7 +116,7 @@ class PatrolController extends Controller
   {
     $patrol->start_at = $request->start_at;
     $patrol->end_at = $request->end_at;
-    $patrol->route = Geometry::toLineString($request->route);
+    $patrol->route_path = Geometry::toLineString($request->route_path);
     $patrol->user_id = $request->user_id;
     $patrol->car_id = $request->car_id;
     $patrol->zone_id = $request->zone_id;
