@@ -63,7 +63,7 @@ function Watch(props: WatchProps) {
               onClick={() => setSelectedReport(r)}
             />
           ))}
-          {props.zones.map((z: any) => (
+          {props.zones.map((z) => (
             <Area key={z.id} paths={polygonToJson(z.area)} />
           ))}
           <CarLocation initialPatrols={props.patrols} />
@@ -134,3 +134,4 @@ function Watch(props: WatchProps) {
 }
 
 export default Watch;
+

@@ -1,3 +1,5 @@
+import type { Car, User } from "vendor";
+
 import Modal from "@/Components/Common/Modal";
 import NavLink from "@/Components/Common/NavLink";
 import SearchIcon from "@/Icons/SearchIcon";
@@ -6,7 +8,12 @@ import { Head, useForm } from "@inertiajs/react";
 import { Button, Label, TextInput } from "flowbite-react";
 import { FormEventHandler, useEffect, useState } from "react";
 
-function ChangeCar({ auth, cars }: any) {
+interface ChangeCarProps {
+  auth: { user: User };
+  cars: Car[];
+}
+
+function ChangeCar({ auth, cars }: ChangeCarProps) {
   const [isOpen, setOpen] = useState(false);
   const [searchFilter, setSearchFilter] = useState("");
   const [filteredCars, setFilteredCars] = useState(cars);
@@ -17,7 +24,7 @@ function ChangeCar({ auth, cars }: any) {
 
   useEffect(() => {
     setFilteredCars(
-      cars.filter((t: any) =>
+      cars.filter((t) =>
         t.licensePlate.toLowerCase().includes(searchFilter.toLowerCase())
       )
     );
@@ -57,7 +64,7 @@ function ChangeCar({ auth, cars }: any) {
         />
       </div>
       <ul className="w-full text-gray-900 dark:text-white mt-4">
-        {filteredCars.map((t: any) => (
+        {filteredCars.map((t) => (
           <li
             key={t.id}
             className="px-4 py-2 border rounded-lg my-2 bg-white dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-800 dark:border-gray-600 border-gray-200 cursor-pointer"
@@ -70,7 +77,7 @@ function ChangeCar({ auth, cars }: any) {
           >
             <span>{t.licensePlate}</span>
             <p className="font-semibold">
-              Zona: {t.zone?.name || "Sin asignar"}
+              Zona: {t.licensePlate || "Sin asignar"}
             </p>
           </li>
         ))}

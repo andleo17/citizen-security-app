@@ -1,10 +1,16 @@
+import type { User } from "vendor";
+
 import UserForm from "@/Components/Admin/Forms/User";
 import AdminLayout from "@/Layouts/AdminLayout";
 import { Head } from "@inertiajs/react";
 
-function Create(props: any) {
+interface CreateProps {
+  auth: { user: User };
+}
+
+function Create({ auth }: CreateProps) {
   return (
-    <AdminLayout auth={props.auth}>
+    <AdminLayout auth={auth}>
       <Head title="Crear usuario" />
       <UserForm />
     </AdminLayout>
@@ -12,3 +18,4 @@ function Create(props: any) {
 }
 
 export default Create;
+

@@ -1,3 +1,5 @@
+import type { User } from "vendor";
+
 import NavLink from "../Common/NavLink";
 import Dropdown from "../Common/Dropdown";
 import DriverIcon from "@/Icons/DriverIcon";
@@ -6,7 +8,11 @@ import UserIcon from "@/Icons/UserIcon";
 import MapIcon from "@/Icons/MapIcon";
 import ReportIcon from "@/Icons/ReportIcon";
 
-function Menu({ user }: any) {
+interface MenuProps {
+  user: User;
+}
+
+function Menu({ user }: MenuProps) {
   if (!user) return <NavLink href={route("login")}>Iniciar sesión</NavLink>;
 
   return (

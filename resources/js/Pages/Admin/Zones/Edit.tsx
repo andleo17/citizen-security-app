@@ -1,12 +1,19 @@
+import type { User, Zone } from "vendor";
+
 import ZoneForm from "@/Components/Admin/Forms/Zone";
 import AdminLayout from "@/Layouts/AdminLayout";
 import { Head } from "@inertiajs/react";
 
-function Edit(props: any) {
+interface EditProps {
+  auth: { user: User };
+  zone: Zone;
+}
+
+function Edit({ auth, zone }: EditProps) {
   return (
-    <AdminLayout auth={props.auth}>
+    <AdminLayout auth={auth}>
       <Head title="Editar zona" />
-      <ZoneForm zone={props.zone} />
+      <ZoneForm zone={zone} />
     </AdminLayout>
   );
 }

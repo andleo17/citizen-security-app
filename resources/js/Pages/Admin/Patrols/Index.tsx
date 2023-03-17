@@ -48,7 +48,12 @@ function Index({ auth, patrolsInDay }: IndexProps) {
   return (
     <AdminLayout auth={auth}>
       <Head title="Lista de patrullas" />
-      <h1 className="font-bold text-2xl mb-5">Patrullas</h1>
+      <div className="mb-5 flex justify-between items-center">
+        <h1 className="font-bold text-2xl">Patrullas</h1>
+        <NavLink href={route("admin.patrols.create")} color="green">
+          Agregar
+        </NavLink>
+      </div>
       <div className="w-full md:w-1/3">
         <DatePicker
           id="filterDate"
@@ -60,11 +65,6 @@ function Index({ auth, patrolsInDay }: IndexProps) {
             )
           }
         />
-      </div>
-      <div className="my-5">
-        <NavLink href={route("admin.patrols.create")} color="green">
-          Agregar
-        </NavLink>
       </div>
       {patrols.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">

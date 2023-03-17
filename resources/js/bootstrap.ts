@@ -34,3 +34,5 @@ window.Echo = new Echo({
   encrypted: true,
   disableStats: true,
 });
+
+import "dayjs/locale/es-mx";

@@ -1,12 +1,19 @@
+import type { ReportCategory, User } from "vendor";
+
 import CategoryForm from "@/Components/Admin/Forms/Category";
 import AdminLayout from "@/Layouts/AdminLayout";
 import { Head } from "@inertiajs/react";
 
-function Edit(props: any) {
+interface EditProps {
+  auth: { user: User };
+  category: ReportCategory;
+}
+
+function Edit({ auth, category }: EditProps) {
   return (
-    <AdminLayout auth={props.auth}>
+    <AdminLayout auth={auth}>
       <Head title="Editar categoría" />
-      <CategoryForm category={props.category} />
+      <CategoryForm category={category} />
     </AdminLayout>
   );
 }

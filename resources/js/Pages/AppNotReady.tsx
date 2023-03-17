@@ -1,10 +1,16 @@
+import type { User } from "vendor";
+
 import NavLink from "@/Components/Common/NavLink";
 import AppLayout from "@/Layouts/AppLayout";
 import { Head } from "@inertiajs/react";
 
-function AppNotReady(props: any) {
+interface AppNotReadyProps {
+  auth: { user: User };
+}
+
+function AppNotReady({ auth }: AppNotReadyProps) {
   return (
-    <AppLayout auth={props.auth}>
+    <AppLayout auth={auth}>
       <Head title="Pendiente de configuración" />
       <main className="p-4 flex justify-center items-center flex-col h-full text-center">
         <h1 className="font-bold text-xl">
@@ -23,3 +29,4 @@ function AppNotReady(props: any) {
 }
 
 export default AppNotReady;
+

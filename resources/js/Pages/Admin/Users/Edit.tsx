@@ -1,12 +1,19 @@
+import type { User } from "vendor";
+
 import UserForm from "@/Components/Admin/Forms/User";
 import AdminLayout from "@/Layouts/AdminLayout";
 import { Head } from "@inertiajs/react";
 
-function Edit(props: any) {
+interface EditProps {
+  auth: { user: User };
+  user: User;
+}
+
+function Edit({ auth, user }: EditProps) {
   return (
-    <AdminLayout auth={props.auth}>
+    <AdminLayout auth={auth}>
       <Head title="Editar usuario" />
-      <UserForm user={props.user} />
+      <UserForm user={user} />
     </AdminLayout>
   );
 }

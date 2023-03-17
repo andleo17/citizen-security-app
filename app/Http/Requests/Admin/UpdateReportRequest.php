@@ -25,7 +25,7 @@ class UpdateReportRequest extends FormRequest
   public function rules(): array
   {
     return [
-      'subCategory' => ['nullable', Rule::exists(ReportSubCategory::class)],
+      'subCategory' => ['nullable', Rule::exists(ReportSubCategory::class, 'id')],
       'state' => 'required|boolean',
     ];
   }

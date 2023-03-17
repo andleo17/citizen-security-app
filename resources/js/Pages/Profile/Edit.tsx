@@ -1,12 +1,16 @@
-import Label from "@/Components/Common/Forms/Label";
+import type { User } from "vendor";
+
 import TextInput from "@/Components/Common/Forms/TextInput";
-import NavLink from "@/Components/Common/NavLink";
 import AppLayout from "@/Layouts/AppLayout";
-import { Head, Link, useForm } from "@inertiajs/react";
+import { Head, useForm } from "@inertiajs/react";
 import { Button } from "flowbite-react";
 import { FormEventHandler, MouseEventHandler } from "react";
 
-function EditProfile({ auth }: any) {
+interface EditProfileProps {
+  auth: { user: User };
+}
+
+function EditProfile({ auth }: EditProfileProps) {
   const {
     data,
     setData,
@@ -89,3 +93,4 @@ function EditProfile({ auth }: any) {
 }
 
 export default EditProfile;
+

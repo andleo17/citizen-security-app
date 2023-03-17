@@ -53,7 +53,7 @@ function ReportForm({ report, categories }: ReportFormProps) {
           onChange={(e) => setData("category", Number(e.target.value))}
           required
         >
-          {categories.map((c: any) => (
+          {categories.map((c) => (
             <SelectInput.Item key={c.id} value={c.id}>
               {c.name}
             </SelectInput.Item>

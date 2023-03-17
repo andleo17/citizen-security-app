@@ -22,7 +22,7 @@ class ReportCategoryController extends Controller
   public function index(): Response
   {
     return Inertia::render('Admin/Categories/Index', [
-      'categories' => ReportCategory::all()
+      'categories' => ReportCategory::paginate(10)
     ]);
   }
 

@@ -35,17 +35,17 @@ interface Paginable<T = any> {
 
 type Polygon = {
   type: "Polygon";
-  coordinates: number[][];
+  coordinates: number[][][];
 };
 
 type LineString = {
   type: "LineString";
-  coordinates: number[];
+  coordinates: number[][];
 };
 
 type Point = {
   type: "Point";
-  coodinates: number[];
+  coordinates: number[];
 };
 
 enum UserRole {

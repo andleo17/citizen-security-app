@@ -41,7 +41,7 @@ function useCategoryForm(category: ReportCategory) {
   function handleDeleteSubCategory(id: number) {
     setData(
       "subCategories",
-      data.subCategories.filter((s: any) => s.id !== id)
+      data.subCategories.filter((s) => s.id !== id)
     );
   }
 
@@ -110,9 +110,7 @@ function CategoryForm({ category }: CategoryFormProps) {
                 <Table.Cell
                   onBlur={(e) => {
                     const newSubcategory = [...data.subCategories];
-                    const cell = newSubcategory.find(
-                      (ss: any) => ss.id === s.id
-                    );
+                    const cell = newSubcategory.find((ss) => ss.id === s.id);
                     cell.name = e.currentTarget.innerText;
                     setData("subCategories", newSubcategory);
                   }}
@@ -123,9 +121,7 @@ function CategoryForm({ category }: CategoryFormProps) {
                 <Table.Cell
                   onBlur={(e) => {
                     const newSubcategory = [...data.subCategories];
-                    const cell = newSubcategory.find(
-                      (ss: any) => ss.id === s.id
-                    );
+                    const cell = newSubcategory.find((ss) => ss.id === s.id);
                     cell.description = e.currentTarget.innerText;
                     setData("subCategories", newSubcategory);
                   }}
