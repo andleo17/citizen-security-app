@@ -12,6 +12,10 @@ interface ItemProps {
   icon?: React.FC<React.SVGProps<SVGSVGElement>>;
 }
 
+interface GroupProps {
+  separate?: boolean;
+}
+
 interface SidebarContextProps {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -35,6 +39,20 @@ function Item({ href, label, icon }: ItemProps) {
         <span>{label}</span>
       </Link>
     </li>
+  );
+}
+
+function Group({ separate = false, children }: PropsWithChildren<GroupProps>) {
+  return (
+    <ul
+      className={`space-y-2 ${
+        separate
+          ? "pt-4 mt-4 border-t border-gray-200 dark:border-gray-700"
+          : ""
+      }`}
+    >
+      {children}
+    </ul>
   );
 }
 
@@ -63,7 +81,7 @@ function Content({ children }: PropsWithChildren) {
         aria-label="Sidebar"
       >
         <div className="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-gray-800">
-          <ul className="space-y-2">{children}</ul>
+          {children}
         </div>
       </aside>
       {open && (
@@ -91,6 +109,7 @@ function Trigger({ children }: PropsWithChildren) {
 }
 
 Sidebar.Item = Item;
+Sidebar.Group = Group;
 Sidebar.Trigger = Trigger;
 Sidebar.Content = Content;
 
