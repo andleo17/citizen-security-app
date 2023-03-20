@@ -7,7 +7,7 @@ import Map, { MapWrapper } from "@/Components/Maps/Map";
 import { polygonToJson } from "@/Utils/Geometry";
 import { useForm } from "@inertiajs/react";
 import { Button, Label } from "flowbite-react";
-import { FormEvent, FormEventHandler } from "react";
+import { FormEvent } from "react";
 import ErrorMessage from "@/Components/Common/Forms/ErrorMessage";
 
 interface ZoneFormProps {
@@ -121,4 +121,3 @@ function ZoneForm({ zone }: ZoneFormProps) {
 }
 
 export default ZoneForm;
-

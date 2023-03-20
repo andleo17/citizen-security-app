@@ -22,7 +22,7 @@ class Patrol extends Model
 
   protected $casts = [
     'location' => Point::class,
-    'route' => LineString::class,
+    'route_path' => LineString::class,
     'start_at' => 'datetime',
     'end_at' => 'datetime',
     'started_at' => 'timestamp',

@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Admin;
 
 use App\Models\Car;
+use App\Models\Route;
 use App\Models\User;
 use App\Models\Zone;
 use Illuminate\Foundation\Http\FormRequest;
@@ -29,12 +30,13 @@ class StorePatrolRequest extends FormRequest
     return [
       'start_at' => 'required|date',
       'end_at' => 'required|date|after:start_at',
-      'route' => 'required|array',
-      'route.*.lat' => 'required|numeric',
-      'route.*.lng' => 'required|numeric',
+      'route_path' => 'nullable|array',
+      'route_path.*.lat' => 'required|numeric',
+      'route_path.*.lng' => 'required|numeric',
       'user_id' => ['required', Rule::exists(User::class, 'id')],
       'car_id' => ['required', Rule::exists(Car::class, 'id')],
       'zone_id' => ['required', Rule::exists(Zone::class, 'id')],
+      'route_id' => ['nullable', Rule::exists(Route::class, 'id')],
     ];
   }
 }

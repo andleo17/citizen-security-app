@@ -32,6 +32,7 @@ function AdminLayout({ children, auth }: PropsWithChildren<AdminLayoutProps>) {
           />
           <Sidebar.Item href={route("admin.zones.index")} label="Zonas" />
           <Sidebar.Item href={route("admin.cars.index")} label="Carros" />
+          <Sidebar.Item href={route("admin.routes.index")} label="Rutas" />
           <Sidebar.Item href={route("admin.patrols.index")} label="Patrullas" />
           <Sidebar.Item href={route("admin.reports.index")} label="Reportes" />
           <Sidebar.Item href={route("admin.users.index")} label="Usuarios" />
@@ -45,3 +46,4 @@ function AdminLayout({ children, auth }: PropsWithChildren<AdminLayoutProps>) {
 }
 
 export default AdminLayout;
+

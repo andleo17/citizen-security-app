@@ -2,7 +2,10 @@
 
 namespace App\Http\Requests\Admin;
 
+use App\Models\Zone;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 class StoreRouteRequest extends FormRequest
 {
@@ -11,7 +14,7 @@ class StoreRouteRequest extends FormRequest
    */
   public function authorize(): bool
   {
-    return false;
+    return Auth::user()->isAdmin();
   }
 
   /**
@@ -22,7 +25,11 @@ class StoreRouteRequest extends FormRequest
   public function rules(): array
   {
     return [
-      //
+      'name' => 'string|required',
+      'path' => 'array|required',
+      'path.*.lat' => 'required|numeric',
+      'path.*.lng' => 'required|numeric',
+      'zone_id' => ['required', 'numeric', Rule::exists(Zone::class, 'id')],
     ];
   }
 }

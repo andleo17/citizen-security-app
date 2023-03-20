@@ -145,14 +145,15 @@ function PatrolForm({ patrol, zones, drivers, cars }: PatrolFormProps) {
         labelText="Ruta"
         value={data.route_id}
         onChange={(e) => {
-          setData("route_id", Number(e.target.value));
-          setData(
-            "route_path",
-            lineStringtoJson(
+          console.log(data.route_id);
+          setData((prev) => ({
+            ...prev,
+            route_id: Number(e.target.value),
+            route_path: lineStringtoJson(
               selectedZone.routes.find((r) => r.id === Number(e.target.value))
                 .path
-            )
-          );
+            ),
+          }));
         }}
         placeholder="Seleccione una ruta"
       >
