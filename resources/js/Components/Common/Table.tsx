@@ -103,7 +103,7 @@ function DeleteButton({ route }: ButtonProps) {
 function Pagination({ info }: PaginationProps) {
   return (
     <nav
-      className="flex items-center justify-between pt-4"
+      className="flex items-center justify-between p-3 bg-gray-100 dark:bg-gray-900"
       aria-label="Table navigation"
     >
       <span className="text-sm font-normal text-gray-500 dark:text-gray-400">
