@@ -26,16 +26,27 @@ function AdminLayout({ children, auth }: PropsWithChildren<AdminLayoutProps>) {
           <Menu user={auth.user} />
         </Navbar>
         <Sidebar.Content>
-          <Sidebar.Item
-            href={route("admin.categories.index")}
-            label="Categorías"
-          />
-          <Sidebar.Item href={route("admin.zones.index")} label="Zonas" />
-          <Sidebar.Item href={route("admin.cars.index")} label="Carros" />
-          <Sidebar.Item href={route("admin.routes.index")} label="Rutas" />
-          <Sidebar.Item href={route("admin.patrols.index")} label="Patrullas" />
-          <Sidebar.Item href={route("admin.reports.index")} label="Reportes" />
-          <Sidebar.Item href={route("admin.users.index")} label="Usuarios" />
+          <Sidebar.Group>
+            <Sidebar.Item href={route("admin.dashboard")} label="Inicio" />
+          </Sidebar.Group>
+          <Sidebar.Group separate>
+            <Sidebar.Item
+              href={route("admin.categories.index")}
+              label="Categorías"
+            />
+            <Sidebar.Item href={route("admin.zones.index")} label="Zonas" />
+            <Sidebar.Item href={route("admin.cars.index")} label="Carros" />
+            <Sidebar.Item href={route("admin.routes.index")} label="Rutas" />
+            <Sidebar.Item
+              href={route("admin.patrols.index")}
+              label="Patrullas"
+            />
+            <Sidebar.Item
+              href={route("admin.reports.index")}
+              label="Reportes"
+            />
+            <Sidebar.Item href={route("admin.users.index")} label="Usuarios" />
+          </Sidebar.Group>
         </Sidebar.Content>
         <main className="p-4 ml-0 sm:ml-64 mt-16 overflow-y-auto w-full">
           {children}
@@ -46,4 +57,3 @@ function AdminLayout({ children, auth }: PropsWithChildren<AdminLayoutProps>) {
 }
 
 export default AdminLayout;
-
