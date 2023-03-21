@@ -15,18 +15,13 @@ import { useEffect, useState } from "react";
 import useSound from "@/Hooks/UseSound";
 
 import alarm from "../../assets/audio/alarma.mp3";
+import { getDefaultLocation } from "@/Utils/Config";
 
 interface WatchProps {
   auth: { user: User };
   reports: Report[];
   patrols: Patrol[];
   zones: Zone[];
-}
-
-function getDefaultLocation() {
-  const location: string = import.meta.env.VITE_DEFAULT_LOCATION;
-  const coordinates = location.split(",");
-  return { lat: Number(coordinates[0]), lng: Number(coordinates[1]) };
 }
 
 function Watch(props: WatchProps) {
@@ -134,4 +129,3 @@ function Watch(props: WatchProps) {
 }
 
 export default Watch;
-

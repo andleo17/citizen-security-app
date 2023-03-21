@@ -13,3 +13,5 @@ Route::resource('zones', Admin\ZoneController::class)->names('admin.zones');
 Route::resource('patrols', Admin\PatrolController::class)->names('admin.patrols');
 Route::post('patrols/filter', [Admin\PatrolController::class, 'getPatrolsByDate'])->name('patrols.filter');
 Route::resource('routes', Admin\RouteController::class)->names('admin.routes');
+
+Route::get('map', [Admin\MapController::class, 'index'])->name('admin.map');

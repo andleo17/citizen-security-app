@@ -47,6 +47,9 @@ function AdminLayout({ children, auth }: PropsWithChildren<AdminLayoutProps>) {
             />
             <Sidebar.Item href={route("admin.users.index")} label="Usuarios" />
           </Sidebar.Group>
+          <Sidebar.Group separate>
+            <Sidebar.Item href={route("admin.map")} label="Análisis en mapa" />
+          </Sidebar.Group>
         </Sidebar.Content>
         <main className="p-4 ml-0 sm:ml-64 mt-16 overflow-y-auto w-full">
           {children}

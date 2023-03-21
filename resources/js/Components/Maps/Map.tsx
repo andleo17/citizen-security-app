@@ -51,8 +51,9 @@ export default function Map({
 export function MapWrapper({ children }: PropsWithChildren) {
   return (
     <Wrapper
+      language="es"
       apiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY}
-      libraries={["drawing", "marker"]}
+      libraries={["drawing", "marker", "visualization"]}
     >
       {children}
     </Wrapper>

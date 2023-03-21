@@ -19,7 +19,9 @@ function SelectInput({
 >) {
   return (
     <div className={inline ? "flex items-center gap-2" : undefined}>
-      {labelText && <Label htmlFor={props.id} value={labelText} />}
+      {labelText && (
+        <Label htmlFor={props.id} value={labelText} inline={inline} />
+      )}
       <select
         {...props}
         name={props.id}
@@ -37,3 +39,4 @@ function SelectInput({
 SelectInput.Item = Item;
 
 export default SelectInput;
+
