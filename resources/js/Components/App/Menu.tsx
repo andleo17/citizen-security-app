@@ -20,7 +20,7 @@ function Menu({ user }: MenuProps) {
       <Dropdown.Trigger>
         <button
           type="button"
-          className="flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150"
+          className="flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 focus:ring-4 focus:ring-gray-200 dark:hover:bg-gray-700 dark:focus:ring-gray-700 focus:outline-none transition ease-in-out duration-150"
         >
           <span className="inline sm:hidden">Menú</span>
           <span className="hidden sm:inline">{user.fullname}</span>
