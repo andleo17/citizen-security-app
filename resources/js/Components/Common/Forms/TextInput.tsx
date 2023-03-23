@@ -10,7 +10,7 @@ function TextInput({
   ...props
 }: PropsWithChildren<FormFieldProps & InputHTMLAttributes<HTMLInputElement>>) {
   return (
-    <div className={inline ? "flex items-center gap-2" : undefined}>
+    <div className={inline ? "flex items-center gap-2 flex-grow" : undefined}>
       {labelText && <Label htmlFor={props.id} value={labelText} />}
       <input
         {...props}
@@ -25,3 +25,4 @@ function TextInput({
 }
 
 export default TextInput;
+
