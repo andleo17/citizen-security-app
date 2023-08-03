@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::middleware('auth')->group(function () {
-  Route::get('/', fn () => Inertia::render('NewMain'))->name('index');
+  Route::get('/', fn () => Inertia::render('Main'))->name('index');
 
   Route::get('/reports', [UserReportController::class, 'index'])->name('reports.index');
   Route::post('/reports', [UserReportController::class, 'store'])->name('reports.store');

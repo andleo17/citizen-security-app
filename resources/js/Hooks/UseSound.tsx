@@ -34,8 +34,9 @@ function useSound(url: string) {
     document.addEventListener("focusin", handleFocusIn);
 
     return () => {
+      newAudio.muted = true;
+      newAudio.pause();
       document.removeEventListener("focusin", handleFocusIn);
-      pause();
     };
   }, []);
 
