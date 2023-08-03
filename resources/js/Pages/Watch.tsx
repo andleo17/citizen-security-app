@@ -9,9 +9,9 @@ import ReportMarker from "@/Components/Main/ReportMarker";
 import Area from "@/Components/Maps/Area";
 import Map, { MapWrapper } from "@/Components/Maps/Map";
 import AppLayout from "@/Layouts/AppLayout";
-import { polygonToJson } from "@/Utils/Geometry";
+import { pointToJson, polygonToJson } from "@/Utils/Geometry";
 import { Head, Link } from "@inertiajs/react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import useSound from "@/Hooks/UseSound";
 
 import alarm from "../../assets/audio/alarma.mp3";
@@ -28,6 +28,12 @@ function Watch(props: WatchProps) {
   const [reports, setReports] = useState(props.reports);
   const [selectedReport, setSelectedReport] = useState<Report>();
   const setPlay = useSound(alarm);
+
+  const sendToWhatsApp = useCallback(() => {
+    const { lat, lng } = pointToJson(selectedReport.location);
+    const googleMapsURL = `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
+    navigator.clipboard.writeText(googleMapsURL);
+  }, [selectedReport]);
 
   useEffect(() => {
     const channel = Echo.channel("reports");
@@ -104,7 +110,7 @@ function Watch(props: WatchProps) {
               </div>
             )}
           </section>
-          <footer className="p-3 flex">
+          <footer className="p-3 flex justify-between">
             <Link
               href={route("reports.attend", {
                 report: selectedReport?.id || -1,
@@ -121,6 +127,13 @@ function Watch(props: WatchProps) {
             >
               Atender
             </Link>
+            <button
+              type="button"
+              onClick={sendToWhatsApp}
+              className="text-white focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 focus:outline-none bg-blue-700 hover:bg-blue-800 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            >
+              Enviar a WhatsApp
+            </button>
           </footer>
         </aside>
       </Modal>
