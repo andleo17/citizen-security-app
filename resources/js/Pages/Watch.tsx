@@ -110,7 +110,9 @@ function Watch(props: WatchProps) {
               </div>
             )}
           </section>
-          <footer className="p-3 flex justify-between">
+          <footer className="p-3">
+            <p className="text-white">Se recomienda proceder con {selectedReport.polices} policías {mockVehicles[selectedReport.vehicle] ?? 'Motocicleta'}</p>
+            <div className="flex justify-between">
             <Link
               href={route("reports.attend", {
                 report: selectedReport?.id || -1,
@@ -134,6 +136,7 @@ function Watch(props: WatchProps) {
             >
               Enviar a WhatsApp
             </button>
+            </div>
           </footer>
         </aside>
       </Modal>
