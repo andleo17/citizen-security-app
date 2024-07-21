@@ -1,0 +1,39 @@
+# use PHP 8.2
+FROM php:8.2-fpm
+
+# Install common php extension dependencies
+RUN apt-get update && apt-get install -y \
+  libfreetype-dev \
+  libjpeg62-turbo-dev \
+  libpng-dev \
+  zlib1g-dev \
+  libzip-dev \
+  unzip \
+  && docker-php-ext-configure gd --with-freetype --with-jpeg \
+  && docker-php-ext-install -j$(nproc) gd \
+  && docker-php-ext-install zip
+
+# Set the working directory
+COPY . /var/www/app
+WORKDIR /var/www/app
+
+RUN chown -R www-data:www-data /var/www/app \
+  && chmod -R 775 /var/www/app/storage
+
+
+# install composer
+COPY --from=composer:2.6.5 /usr/bin/composer /usr/local/bin/composer
+COPY --from=node:latest /usr/local/lib/node_modules /usr/local/lib/node_modules
+COPY --from=node:latest /usr/local/bin/node /usr/local/bin/node
+RUN ln -s /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm
+
+# copy composer.json to workdir & install dependencies
+COPY composer.json ./
+RUN composer install
+
+COPY package.json ./
+RUN npm install && npm run build
+RUN chown -R www-data:www-data /var/www/app/public
+
+# Set the default command to run php-fpm
+CMD ["php-fpm"]
