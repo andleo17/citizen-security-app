@@ -111,31 +111,30 @@ function Watch(props: WatchProps) {
             )}
           </section>
           <footer className="p-3">
-            <p className="text-white">Se recomienda proceder con {selectedReport.polices} policías {mockVehicles[selectedReport.vehicle] ?? 'Motocicleta'}</p>
             <div className="flex justify-between">
-            <Link
-              href={route("reports.attend", {
-                report: selectedReport?.id || -1,
-              })}
-              method="post"
-              as="button"
-              className="text-white focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 focus:outline-none bg-green-700 hover:bg-green-800 focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
-              onSuccess={() => {
-                setReports((prev) =>
-                  prev.filter((r) => r.id !== selectedReport.id)
-                );
-                setSelectedReport(null);
-              }}
-            >
-              Atender
-            </Link>
-            <button
-              type="button"
-              onClick={sendToWhatsApp}
-              className="text-white focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 focus:outline-none bg-blue-700 hover:bg-blue-800 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-            >
-              Enviar a WhatsApp
-            </button>
+              <Link
+                href={route("reports.attend", {
+                  report: selectedReport?.id || -1,
+                })}
+                method="post"
+                as="button"
+                className="text-white focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 focus:outline-none bg-green-700 hover:bg-green-800 focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+                onSuccess={() => {
+                  setReports((prev) =>
+                    prev.filter((r) => r.id !== selectedReport.id)
+                  );
+                  setSelectedReport(null);
+                }}
+              >
+                Atender
+              </Link>
+              <button
+                type="button"
+                onClick={sendToWhatsApp}
+                className="text-white focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 focus:outline-none bg-blue-700 hover:bg-blue-800 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+              >
+                Copiar ubicación
+              </button>
             </div>
           </footer>
         </aside>

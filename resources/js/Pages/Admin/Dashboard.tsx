@@ -14,7 +14,7 @@ function Main({ auth, ...data }: MainProps) {
   return (
     <AdminLayout auth={auth}>
       <Head title="Dashboard" />
-      <div className="grid grid-cols-4">
+      <div className="grid grid-cols-4 gap-2">
         <Card>
           <Card.Title>Reportes recibidos en total</Card.Title>
           <Card.Body>

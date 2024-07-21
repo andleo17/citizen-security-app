@@ -143,8 +143,8 @@ function Pagination({ info }: PaginationProps) {
             </svg>
           </Link>
         </li>
-        {info.links.slice(1, -1).map((l) => (
-          <li>
+        {info.links.slice(1, -1).map((l, i) => (
+          <li key={i}>
             <Link
               href={l.url}
               className={

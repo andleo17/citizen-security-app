@@ -53,3 +53,4 @@ const Marker: React.FC<MarkerOptions> = ({
 };
 
 export default Marker;
+
