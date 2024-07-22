@@ -1,5 +1,9 @@
+networks:
+  proxy:
+    external: true
+
 volumes:
-    app-db:
+  app-db:
 
 services:
   # Application Service
@@ -27,12 +31,26 @@ services:
   nginx:
     image: nginx:alpine
     container_name: nginx
-    ports:
-      - "8083:80"
     tty: true
+    networks:
+      - proxy
+      - default
     volumes:
       - ./:/var/www/app
       - ./default.conf:/etc/nginx/conf.d/default.conf
     depends_on:
       - app
       - db
+    labels:
+      # HTTP
+      - traefik.enable=true
+      - traefik.http.routers.citizen-security.rule=Host(`${HOSTNAME}`)
+      - traefik.http.routers.citizen-security.entrypoints=http
+      - traefik.http.routers.citizen-security.middlewares=citizen-security-https-redirect
+      - traefik.http.middlewares.citizen-security-https-redirect.redirectscheme.scheme=https
+      - traefik.http.services.citizen-security.loadbalancer.server.port=80
+     # HTTPS
+      - traefik.http.routers.citizen-security-secure.tls=true
+      - traefik.http.routers.citizen-security-secure.rule=Host(`${HOSTNAME}`)
+      - traefik.http.routers.citizen-security-secure.entrypoints=https
+      - traefik.http.routers.citizen-security-secure.tls.certresolver=production
