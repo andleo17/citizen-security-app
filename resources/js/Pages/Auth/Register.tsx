@@ -1,7 +1,8 @@
 import { ChangeEventHandler, FormEventHandler, useEffect } from "react";
 import GuestLayout from "@/Layouts/GuestLayout";
 import { Head, Link, useForm } from "@inertiajs/react";
-import { Button, Label, TextInput } from "flowbite-react";
+import { Label, TextInput } from "flowbite-react";
+import PrimaryButton from "@/Components/Common/PrimaryButton";
 
 interface RegisterFormInputs {
   dni: string;
@@ -152,9 +153,13 @@ export default function Register() {
               ¿Ya estás registrado?
             </Link>
 
-            <Button className="ml-4" disabled={processing} type="submit">
+            <PrimaryButton
+              className="ml-4"
+              processing={processing}
+              type="submit"
+            >
               Registro
-            </Button>
+            </PrimaryButton>
           </div>
         </div>
       </form>
